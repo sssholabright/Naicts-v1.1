@@ -17,6 +17,7 @@ import Excos from './SignedInStack/Excos';
 import ListMembers from './SignedInStack/Discussion/ListMembers';
 import CreateDiscussion from './SignedInStack/Discussion/CreateDiscussion';
 import Participant from './SignedInStack/Discussion/Participant';
+import DiscussionPage from './SignedInStack/Discussion/DiscussionPage';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -33,7 +34,7 @@ export default function SignedInStack() {
     }
     
     return (
-        <Stack.Navigator initialRouteName="participant">
+        <Stack.Navigator initialRouteName="">
             <Stack.Group>
                 <Stack.Screen name="stacktab" component={StackTab} options={{headerShown: false}}/>
                 <Stack.Screen name="profile" component={Profile} options={{headerShown: true}} />
@@ -43,6 +44,7 @@ export default function SignedInStack() {
                 <Stack.Screen name="courses" component={Courses} options={{headerShown: false}} />
                 <Stack.Screen name="xd" component={Xd} options={{headerShown: false}} />
                 <Stack.Screen name="videopage" component={VideoPage} options={{headerShown: false}} />
+                <Stack.Screen name="discussionpage" component={DiscussionPage} options={{headerShown: false}} />
             </Stack.Group>
             <Stack.Group screenOptions={{ presentation: "modal" }} >  
                 <Stack.Screen name="ranking" component={Ranking} options={{headerShown: false}} />

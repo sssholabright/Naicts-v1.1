@@ -2,12 +2,12 @@ import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity,
 import React, { useState } from 'react'
 import Icon from '@expo/vector-icons/Ionicons'
 
-export default function CreateDiscussion() {
+export default function CreateDiscussion({}) {
     const [discuss, setDiscuss] = useState("")
     const [discussDetails, setDiscussDetails] = useState("")
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar />
+            <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
             <View style={styles.discussionContainer}>
                 <TouchableOpacity activeOpacity={0.9}>
                     <Icon name="chevron-back" size={24} />
@@ -39,7 +39,7 @@ export default function CreateDiscussion() {
                 />
             </View>
             <View>
-                <TouchableOpacity activeOpacity={0.9} style={{width: '100%', backgroundColor: 'black', padding: 15, borderRadius: 10}}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('participant')} style={{width: '100%', backgroundColor: 'black', padding: 15, borderRadius: 10}}>
                     <Text style={{color: '#fff', textAlign: 'center'}}>Create Discussion</Text>
                 </TouchableOpacity>
             </View>
