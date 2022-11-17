@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Naicts-v1.1",
+    "slug": "Naicts-v1.1",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
