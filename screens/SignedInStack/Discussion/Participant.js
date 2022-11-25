@@ -1,6 +1,6 @@
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import Icon from '@expo/vector-icons/Ionicons'
+import Icon from '@expo/vector-icons/Entypo'
 
 export default function Participant({navigation}) {
     return (
@@ -8,10 +8,10 @@ export default function Participant({navigation}) {
             <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
             <View style={{flexDirection: "row", justifyContent: 'space-between'}}>
                 <TouchableOpacity activeOpacity={0.9} style={styles.iconBox} onPress={() => navigation.goBack()}>
-                    <Icon name="add" size={24} />
+                    <Icon name="cross" size={24} color="ef018a" />
                 </TouchableOpacity>
                 <TouchableOpacity activeOpacity={0.9} style={styles.iconBox}>
-                    <Icon name="airplane" size={24} />
+                    <Icon name="menu" size={24} color="ef018a" />
                 </TouchableOpacity>
             </View>
             <View style={{justifyContent: 'center', alignItems: 'center', padding: 10}}>
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     },
 
     joinButton: {
-        backgroundColor: 'black',
+        backgroundColor: '#ef018a',
         padding: 20,
         justifyContent: 'center', 
         alignItems: 'center',

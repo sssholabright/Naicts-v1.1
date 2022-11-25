@@ -64,9 +64,9 @@ export default function Ranking({navigation}) {
         return (
             <TouchableOpacity activeOpacity={0.9}>
                 <Animated.View style={[styles.item, {transform: [{scale}], opacity}]}>
-                    <Image style={styles.image} source={require('../../assets/2.jpg')} /> 
+                    <Image style={styles.image} source={require('../../assets/me.jpg')} /> 
                     <View style={styles.wrapText}>
-                        <Text style={{backgroundColor: 'blue', color: "#fff", fontWeight: '700', fontSize: 18, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 50, textAlign: 'center'}}>{index+1}</Text>
+                        <Text style={{backgroundColor: '#ef018a', color: "#fff", fontWeight: '700', fontSize: 18, paddingHorizontal: 10, paddingVertical: 5, borderRadius: 50, textAlign: 'center'}}>{index+1}</Text>
                         <Text style={{fontSize: 18, fontWeight: '700'}}>Alonco Lee</Text>
                     </View>
                 </Animated.View>
@@ -75,7 +75,7 @@ export default function Ranking({navigation}) {
     }
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor="#1c1c1c" />
+            <StatusBar barStyle="light-content" backgroundColor="#ef018a" />
             <ImageBackground style={StyleSheet.absoluteFillObject} source={require('../../assets/2.jpg')} blurRadius={30} />
                 <View style={styles.header}>
                     <TouchableOpacity style={{position: 'absolute', top: 15, left: 15}} onPress={() => navigation.goBack()} activeOpacity={0.6}>
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     }, 
 
     header: {
-        backgroundColor: '#1c1c1c',
+        backgroundColor: '#ef018a',
         paddingVertical: 50,
         justifyContent: 'center',
         alignItems: 'center',

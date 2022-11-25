@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useState } from 'react'
 import { Button, Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from '@expo/vector-icons/Ionicons'
+import useAuth from './authHooks/useAuth'
 
 
 export default function Register({navigation}) {
@@ -9,6 +10,8 @@ export default function Register({navigation}) {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [showPassword, setShowPassword] = useState(true)
     const [showConfirmPassword, setShowConfirmPassword] = useState(true)
+
+    const { loading, register } = useAuth()
 
     return (
         <SafeAreaView>
@@ -69,8 +72,8 @@ export default function Register({navigation}) {
                     </View>
                 </View>
                 <View style={styles.otherSection}>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.buttonBox}>
-                        <Text style={{fontSize: 18, fontWeight: '500'}}>Sign Up</Text>
+                    <TouchableOpacity activeOpacity={0.8} style={styles.buttonBox} onPress={() => register(email, password)} >
+                        {loading && <Text style={{fontSize: 18, fontWeight: '500'}}>Register</Text>}
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>

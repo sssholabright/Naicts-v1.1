@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from '@expo/vector-icons/Ionicons'
+import useAuth from './authHooks/useAuth'
 
 
 export default function Login({navigation}) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(true)
+    
+    const { login, loading } = useAuth()
 
     return (
         <SafeAreaView>
@@ -60,7 +63,8 @@ export default function Login({navigation}) {
                             <Text>reset</Text>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity activeOpacity={0.8} style={styles.buttonBox}>
+                    
+                    <TouchableOpacity activeOpacity={0.8} style={styles.buttonBox} onPress={() => login(email, password)}>
                         <Text style={{fontSize: 18, fontWeight: '500'}}>Login</Text>
                     </TouchableOpacity>
                 </View>
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
     },
 
     buttonBox: {
-        backgroundColor: 'pink',
+        backgroundColor: '#ef018a',
         padding: 15,
         marginVertical: 20,
         width: '100%',

@@ -1,6 +1,8 @@
-import { Dimensions, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import Icon from '@expo/vector-icons/Ionicons'
+import { discussion } from '../AllTempData'
+import Discuss from './Discuss'
 
 export default function DiscussionPage({navigation}) {
     const [message, setMessage] = useState("")
@@ -35,132 +37,25 @@ export default function DiscussionPage({navigation}) {
                         <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
                     </View>
                 </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
+
+                {/* Members Discussions */}
+                <View style={{marginVertical: 10, marginHorizontal: 20, backgroundColor: 'whitesmoke'}}>
+                    <FlatList 
+                        showsVerticalScrollIndicator={false}
+                        data={discussion} 
+                        listKey="Discuss" 
+                        keyExtractor={item => `Discuss-${item.id}`} 
+                        contentContainerStyle={{marginTop: 0}} 
+                        renderItem={({item, index}) => (
+                            <Discuss    
+                                discuss={item} 
+                            />
+                        )}
+                        ItemSeparatorComponent={() => (
+                            <View style={{height: 1, width: '100%', backgroundColor: 'lightgray', marginVertical: 10}} />
+                        )}
+                    />
+                 </View>   
                 
             <View style={{height: 100}} />
             </ScrollView>

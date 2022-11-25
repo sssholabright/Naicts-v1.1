@@ -1,124 +1,126 @@
-import { Dimensions, Image, ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import Icon from '@expo/vector-icons/Ionicons'
-import CourseList from './CourseList'
+import { Animated, FlatList, Image, ImageBackground, Platform, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useRef } from 'react'
+import constants from './constants'
+import { categories, courses_list_1, courses_list_2 } from './dummyData'
+import { Entypo, Ionicons } from '@expo/vector-icons'
+import Courses from './components/Courses'
+import Section from './components/Section'
+import Categories from './components/Categories'
+import CoursesCard from './components/CoursesCard'
 
 export default function Elearning({navigation}) {
     return (
-        <SafeAreaView style={styles.container}>
-            <StatusBar />
-            <ImageBackground source={require('../../../assets/Home.png')}  resizeMode="cover" style={styles.backgroundImg}>
-                <ScrollView>
-                    <View style={styles.headerContainer}>
-                        <View style={styles.container2}>
-                            <Icon name='more' size={24} />
-                       </View>
-                    </View>
-                    <Text style={{paddingHorizontal: 20, fontSize: 35, paddingTop: 40, color: "#fff"}}>Welcome back Mikolaj</Text>
-
-                    <View style={styles.searchInputContainer}>
-                        <TextInput
-                            placeholder="Search for new knowledge!"
-                            placeholderTextColor="#345c74"
-                            style={styles.textInput} />
-                        <Icon name='search' size={20} />
-                    </View>
-                    <View style={styles.textContainer}>
-                        <View>
-                            <Text style={{ color: "#345c74", fontSize: 18, width: 180}}>Start learning new Staff</Text>
-                            <TouchableOpacity onPress={() => navigation.navigate('courses')} style={styles.textButton}>
-                                <Text style={{color: "#fff", fontSize: 12, marginTop: -2}}>Categories</Text>  
-                                <Icon name='chevron-forward' size={20} color="#fff" />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{width: '50%'}}>
-                            <Image source={require('../../../assets/undraw.png')} style={{marginTop: 35, width: 200, height: 100}} />
-                        </View>
-                    </View>
-                    <Text style={{ color: "#345c74", fontSize: 20, paddingHorizontal: 20, marginTop: 20, marginBottom: 10}}>Courses in progress</Text>
-
-                    <CourseList
-                        img={require('../../../assets/xd.png')}
-                        title="Adobe XD Prototyping"
-                        bg="#fdddf3"
-                    />
-                    <CourseList
-                        img={require('../../../assets/sketch.png')}
-                        title="Sketch shortcuts and tricks"
-                        bg="#fef8e3"
-                    />
-                    <CourseList
-                        img={require('../../../assets/ae.png')}
-                        title="UI Motion Design in After Effects"
-                        bg="#fcf2ff"
-                    />
-                </ScrollView>
+        <View style={{padding: 20, backgroundColor: '#fff', flex: 1}}>
+            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
+                    {Platform.OS === "android" ? (
+                        <Ionicons name="arrow-back" size={24} color='#000' /> 
+                    ): Platform.OS === "ios" (
+                        <Ionicons name="chevron-back" size={24} color='#000' />
+                    )}
+                </TouchableOpacity> 
+                <View style={{}}>
+                    <Text style={{fontSize: 18, letterSpacing: 0.1, fontWeight: '700'}}>E-LEARNING</Text>
+                </View>  
+                <Text>{'        '}</Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff'}}>
+                <Text style={{fontWeight: '700', fontSize: 30, textAlign: 'center', paddingHorizontal: 10, color: 'lightgray', letterSpacing: 0.2}}>E-Learning is not available for now, Come Back Later</Text>
+            </View>
+        </View>
+    )} 
+        {/*<View style={{ backgroundColor: '#fff', paddingHorizontal: 20}}>
+            {/* Header *
+            <View style={{marginVertical: 20}}>
+                <Text style={{fontSize: 20}}>Hello, BrightProgrammers</Text>
+                <Text style={{color: "gray"}}>Thursday</Text>
+            </View>
+        
+            {/* Start Learning *
+            <ScrollView contentContainerStyle={{paddingBottom: 15}} showsVerticalScrollIndicator={true}>
+            <ImageBackground source={require('../../../assets/crs.png')} imageStyle={{borderRadius: 15}} style={{alignItems: 'flex-start', marginTop: 10, padding: 15}}>
+                {/* info section *
+                <View>
+                    <Text style={{color: '#fff'}}>HOW TO</Text>
+                    <Text style={{color: "#fff"}}>Make your brand more visible</Text>
+                    <Text style={{color: "#fff", marginTop: 10}}>By Scott Harris</Text>
+                </View>
+                {/* Image section * /}
+                <Image source={require('../../../assets/Documents.png')} style={{width: "100%", height: 110, marginTop: 10}} />
+                    
+                {/* Button section *
+                <TouchableOpacity activeOpacity={0.5} style={{alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff', padding: 10, borderRadius: 25, marginTop: 20}} disabled={false}>
+                    <Text style={{}}>Start Learning</Text>
+                </TouchableOpacity>
             </ImageBackground>
-        </SafeAreaView>
-    )
-}
 
-const styles = StyleSheet.create({
-    container: {
-        height: Dimensions.get('window').height,
-    },
+            {/* Courses SECTION *
+            <FlatList 
+                horizontal 
+                data={courses_list_1} 
+                listKey="Courses" 
+                keyExtractor={item => `Courses-${item.id}`}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{marginTop: 15}}
+                renderItem={({item, index}) => (
+                    <Courses
+                        containerStyle={{
+                            marginRight: index == 0 ? 10 : 15, marginRight: index == courses_list_1.length - 1 ? 10 : 0
+                        }}
+                        course={item}
+                    />
+                )}
+            />
+            <View style={{height: 2, width: '100%', backgroundColor: 'gray', marginVertical: 10}} />
 
-    backgroundImg: {
-        flex: 1,
-        justifyContent: 'center'
-    },
+            {/* categories SECTION *
+            <View style={{}}>
+                <Section title="Categories" />
+                <FlatList 
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                    data={categories} 
+                    listKey="Categories" 
+                    keyExtractor={item => `Catergories-${item.id}`} 
+                    contentContainerStyle={{marginTop: 10}} 
+                    renderItem={({item, index}) => (
+                        <Categories 
+                            category={item}
+                            containerStyle={{
+                                marginLeft: index == 0 ? 5 : 15,
+                                marginRight: index == categories.length - 1 ? 10 : 0,
+                            }}
+                            />
+                    )}
+                />
+            </View>
+            <View style={{}}>
+                <Section title="Popular Courses" containerStyle={{marginTop: 30}}>
+                <FlatList 
+                    data={courses_list_2} 
+                    listKey="Popular Courses" 
+                    keyExtractor={item => `Popular Courses-${item.id}`} 
+                    contentContainerStyle={{marginTop: 0}} 
+                    renderItem={({item, index}) => (
+                        <CoursesCard    
+                            card={item} 
+                            containerStyle={{
+                                marginVertical: 10, 
+                                marginTop: index == 0 ? 15 : 10
+                            }}
+                        />
+                    )}
+                    ItemSeparatorComponent={() => (
+                        <View style={{height: 2, width: '100%', backgroundColor: 'gray', marginVertical: 10}} />
+                    )}
+                />
+                </Section>
+            </View>
+            </ScrollView>
+
+            {/* Content *    
+
+                    </View>*/}
     
-    headerContainer: {
-        width: "100%",
-        alignItems: "flex-end",
-        paddingHorizontal: 20
-    },
-    
-    container2: {
-        paddingHorizontal: 10,
-        paddingVertical: 12,
-        borderRadius: 10,
-        marginTop: 30,
-        backgroundColor: "#d1a0a7",
-    },
-
-    searchInputContainer: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#fff",
-        padding: 10,
-        borderRadius: 12,
-        marginHorizontal: 20,
-        marginTop: 20
-    },
-    
-    textInput: {
-        fontFamily: "bold",
-        fontSize: 12,
-        width: '100%',
-        paddingVertical: 5,
-        paddingHorizontal: 10
-    },
-
-    textContainer: {
-        flexDirection: "row",
-        backgroundColor: "#fff2f2",
-        marginTop: 15,
-        marginHorizontal: 20,
-        borderRadius: 20,
-        paddingVertical: 30,
-        paddingHorizontal: 30,
-        justifyContent: 'space-between',
-    },
-   
-    textButton: {
-        flexDirection: "row",
-        backgroundColor: "#f58084",
-        justifyContent: 'space-between',
-        alignItems: "center",
-        marginTop: 20,
-        width: 120,
-        padding: 10,
-        borderRadius: 14,
-    },
-})
+const styles = StyleSheet.create({})
