@@ -1,4 +1,4 @@
-import { Image, ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -7,6 +7,7 @@ export default function EventDetail({route, navigation}) {
 
     return (
         <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {/* Header Container */}
                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -26,7 +27,7 @@ export default function EventDetail({route, navigation}) {
                 {/* Image Container */}
                 <ImageBackground
                     resizeMode="contain" 
-                    source={detail.img} 
+                    source={detail?.img} 
                     style={{
                         width: '100%', 
                         height: 300, 
@@ -43,12 +44,12 @@ export default function EventDetail({route, navigation}) {
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <View>
                             <Text style={{fontWeight: '500', fontSize: 25, letterSpacing: 0.2, lineHeight: 40}}>{detail.title}</Text>
-                            <Text style={{fontWeight: '300', color: 'gray'}}>Organized by Mujeeb Adejobi</Text>
+                            <Text style={{fontWeight: '300', color: 'gray'}}>Organized by {detail.organizer}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                                 <Ionicons name="location-outline" size={18} color="#ef018a" />
-                                <Text style={{color: 'gray'}}> London   •   </Text>
+                                <Text style={{color: 'gray'}}> {detail.venue}   •   </Text>
                                 <Ionicons name="time-outline" size={18} color="#ef018a" />
-                                <Text style={{color: 'gray'}}> 18:00PM - 22:00PM</Text>
+                                <Text style={{color: 'gray'}}> {detail.time}</Text>
                             </View>
                         </View>
                         <View style={[{backgroundColor: 'whitesmoke', padding: 12,marginRight: 10, borderRadius: 10, alignItems: 'center', justifyContent: 'center'}, styles.shadow]}>
@@ -63,16 +64,16 @@ export default function EventDetail({route, navigation}) {
                             <Text>Rating</Text>
                         </View>
                         <View style={{flexDirection: 'row', alignItems: 'center', }}>
-                            {detail.eventUsers.map((join, index) => (
+                            {/*detail.eventUsers.map((join, index) => (
                                 <Image key={index} source={join} style={{marginLeft: -15, width: 35, height: 35, borderRadius: 50, borderWidth: 2, borderColor: 'whitesmoke'}} />
-                            ))}
+                            ))*/}
                         </View>
                     </View>
 
                     {/* About Section */}
                     <View style={{}}>
                         <Text style={{fontSize: 20, fontWeight: '500', lineHeight: 40 }}>About Event</Text>
-                        <Text style={{fontSize: 15, color: 'gray'}}>One theory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holdstheory holds that many Halloween traditions were influenced bt Celtic harvest festivals particularly the...</Text>
+                        <Text style={{fontSize: 15, color: 'gray'}}>{detail.content}</Text>
                     </View>
                 </View>
             </ScrollView>
@@ -81,7 +82,7 @@ export default function EventDetail({route, navigation}) {
             <View style={[{ position: 'absolute', bottom: 10, alignSelf: 'center', height: '8%', width: '100%', justifyContent: 'center', alignItems: 'center'}, styles.shadow]}>
                 <TouchableOpacity activeOpacity={0.8} style={[{width: '100%', flexDirection: 'row', height: '90%', backgroundColor: '#ef018a', borderRadius: 25, justifyContent: 'center', alignItems: 'center'}, styles.shadow]}>
                     <MaterialCommunityIcons name="chevron-triple-right" size={20} color="#fff" />
-                    <Text style={{fontSize: 12, fontWeight: '500', letterSpacing: 1, color: 'white', textTransform: 'uppercase'}}> Buy Ticket - $10</Text>
+                    <Text style={{fontSize: 12, fontWeight: '500', letterSpacing: 1, color: 'white', textTransform: 'uppercase'}}> {detail.price === "Free" ? "Free" : 'Buy Ticket - $'+detail.price}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

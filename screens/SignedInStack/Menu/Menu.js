@@ -18,7 +18,7 @@ export default function Menu({navigation}) {
                         : item.title === "News & Updates" 
                             ? navigation.navigate("circular")
                         : item.title === "Discussion Forum"
-                            ? navigation.navigate("creatediscussion")
+                            ? navigation.navigate("discussionforum")
                         : item.title === "Events"
                             ? navigation.navigate("event")
                         : item.title === "Gallery"
@@ -33,6 +33,8 @@ export default function Menu({navigation}) {
                             ? navigation.navigate("documentscreen")
                         : item.title === "Executives"
                             ? navigation.navigate("executives") 
+                        : item.title === "Contact Us"
+                            ? navigation.navigate("contactus") 
                         : null;
                     }
                     return (

@@ -13,8 +13,8 @@ export const AuthProvider = ({children}) => {
     const [error, setError] = useState(null)
     const [loadingInitial, setLoadingInitial] = useState(true)
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, user => {
+    useEffect(() => 
+        onAuthStateChanged(auth, (user) => {
             if (user) {
                 // Logged in
                 setUser(user)
@@ -23,9 +23,8 @@ export const AuthProvider = ({children}) => {
                 setUser(null)
             }
             setLoadingInitial(false)
-        })
-        return () => unsubscribe()
-    }, [])
+        }),
+ [])
 
     
     const login = async (email, password) => {
@@ -34,7 +33,7 @@ export const AuthProvider = ({children}) => {
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
             setUser(userCredential.user)
             setLoading(false)
-
+            console.log(userCredential.user)
             //.catch((error) => setError(error))
             //.finally(() => setLoading(false))
     }

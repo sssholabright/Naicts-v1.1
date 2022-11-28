@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions, Image, KeyboardAvoidingView, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, KeyboardAvoidingView, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Icon from '@expo/vector-icons/Ionicons'
 import useAuth from './authHooks/useAuth'
 
@@ -9,12 +9,12 @@ export default function Login({navigation}) {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(true)
     
-    const { login, loading } = useAuth()
+    const { login, loading } = useAuth();
 
     return (
         <SafeAreaView>
             <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <KeyboardAvoidingView behaviour={"height"} style={styles.container}>
+            <KeyboardAvoidingView behaviour={Platform.OS === 'android' ? "height" : "padding"} style={styles.container}>
                 <View style={styles.logoSection}>
                     <Image style={{width: 70, height: 70}} source={require('../../assets/naicts.jpg')} />    
                 </View>
@@ -65,7 +65,7 @@ export default function Login({navigation}) {
                     </View>
                     
                     <TouchableOpacity activeOpacity={0.8} style={styles.buttonBox} onPress={() => login(email, password)}>
-                        <Text style={{fontSize: 18, fontWeight: '500'}}>Login</Text>
+                        <Text style={{fontSize: 18, fontWeight: '500', color: '#fff'}}>Login</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>

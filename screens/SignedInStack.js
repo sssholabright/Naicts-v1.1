@@ -7,7 +7,7 @@ import Menu from './SignedInStack/Menu/Menu';
 import Event from './SignedInStack/Event/Event';
 import Ranking from './SignedInStack/Ranking';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, MaterialCommunityIcons, FontAwesome5, Octicons } from '@expo/vector-icons'
+import { Feather, FontAwesome5, Octicons } from '@expo/vector-icons'
 import Members from './SignedInStack/Members/Members';
 import Executives from './SignedInStack/Executives/Executives';
 import Excos from './SignedInStack/Executives/Excos';
@@ -27,6 +27,8 @@ import ProductInfo from './SignedInStack/MarketPlace/ProductInfo';
 import EventDetail from './SignedInStack/Event/EventDetail';
 import DocumentScreen from './SignedInStack/Files/DocumentScreen';
 import FilesList from './SignedInStack/Files/FilesList';
+import DiscussionForum from './SignedInStack/Discussion/DiscussionForum';
+import ContactUs from './SignedInStack/Contact Us/ContactUs';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,7 +58,7 @@ export default function SignedInStack() {
                     tabBarInactiveTintColor: 'gray',
                     tabBarStyle: [{height: 70}]
                 })} 
-                initialRouteName="">            
+                initialRouteName="Profile">            
                 <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
                 <Tab.Screen name="Menu" component={Menu} options={{headerShown: false}} />
                 <Tab.Screen name="Profile" component={Profile} options={{headerShown: false}}/>
@@ -65,31 +67,33 @@ export default function SignedInStack() {
     }
     
     return (
-        <Stack.Navigator initialRouteName="">
+        <Stack.Navigator initialRouteName="contactus">
             <Stack.Group>
                 <Stack.Screen name="stacktab" component={StackTab} options={{headerShown: false}}/>
                 <Stack.Screen name="profile" component={Profile} options={{headerShown: true}} />
-                <Stack.Screen name="menu" component={Menu} options={{headerShown: false}} />
-                <Stack.Screen name="event" component={Event} options={{headerShown: false}} />
-                <Stack.Screen name="gallery" component={Gallery} options={{headerShown: false}} />
-                <Stack.Screen name="elearning" component={Elearning} options={{headerShown: false}} />
-                <Stack.Screen name="discussionpage" component={DiscussionPage} options={{headerShown: false}} />
-                <Stack.Screen name="participant" component={Participant} options={{headerShown: false}} />
-                <Stack.Screen name="documentscreen" component={DocumentScreen} options={{headerShown: false}} />
+                <Stack.Screen name="members" component={Members} options={{headerShown: false}} />
                 <Stack.Screen name="circular" component={Circular} options={{headerShown: false}} />
-                <Stack.Screen name="marketplace" component={MarketPlace} options={{headerShown: false}} />
-                <Stack.Screen name="eventdetail" component={EventDetail} options={{headerShown: false}} />
-                <Stack.Screen name="lostandfound" component={LostAndFound} options={{headerShown: false}} />
-            </Stack.Group>
-            <Stack.Group screenOptions={{ presentation: "modal" }} >  
+                <Stack.Screen name="discussionforum" component={DiscussionForum} options={{headerShown: false}} />
+                <Stack.Screen name="event" component={Event} options={{headerShown: false}} />
+                <Stack.Screen name="elearning" component={Elearning} options={{headerShown: false}} />
                 <Stack.Screen name="ranking" component={Ranking} options={{headerShown: false}} />
+                <Stack.Screen name="gallery" component={Gallery} options={{headerShown: false}} />
+                <Stack.Screen name="documentscreen" component={DocumentScreen} options={{headerShown: false}} />
+                <Stack.Screen name="marketplace" component={MarketPlace} options={{headerShown: false}} />
+                <Stack.Screen name="lostandfound" component={LostAndFound} options={{headerShown: false}} />
+                <Stack.Screen name="executives" component={Executives} options={{headerShown: false}} />
+                <Stack.Screen name="contactus" component={ContactUs} options={{headerShown: false}} />
+            </Stack.Group>
+            {/* Components Stack */}
+            <Stack.Group screenOptions={{ presentation: "modal" }} >  
                 <Stack.Screen name="fileslist" component={FilesList} options={{headerShown: false}} />
                 <Stack.Screen name="searchcourse" component={CourseSearch} options={{headerShown: false}} />
                 <Stack.Screen name="showimage" component={ShowImage} options={{headerShown: false}} />
+                <Stack.Screen name="discussionpage" component={DiscussionPage} options={{headerShown: false}} />
+                <Stack.Screen name="eventdetail" component={EventDetail} options={{headerShown: false}} />
+                <Stack.Screen name="participant" component={Participant} options={{headerShown: false}} />
                 <Stack.Screen name="productinfo" component={ProductInfo} options={{headerShown: false}} />
                 <Stack.Screen name="productlist" component={ProductList} options={{headerShown: false}} />
-                <Stack.Screen name="members" component={Members} options={{headerShown: false}} />
-                <Stack.Screen name="executives" component={Executives} options={{headerShown: false}} />
                 <Stack.Screen name="excos" component={Excos} options={{headerShown: false}} />
                 <Stack.Screen name="listmembers" component={ListMembers} options={{headerShown: false}} />
                 <Stack.Screen name="creatediscussion" component={CreateDiscussion} options={{headerShown: false}} />

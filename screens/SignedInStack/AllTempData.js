@@ -20,10 +20,6 @@ export const menubox = [
         icon: 'book-outline',
     },
     {
-        title: "Ranking",
-        icon: '',
-    },
-    {
         title: "Gallery",
         icon: 'images-outline',
     },
@@ -46,6 +42,10 @@ export const menubox = [
     {
         title: "Executives",
         icon: 'people-circle-outline',
+    },
+    {
+        title: "Contact Us",
+        icon: 'call-outline',
     },
 ]
 

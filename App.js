@@ -12,7 +12,7 @@ export default function App() {
       {/* HOC => Higher Order Component */}
       <AuthProvider>
         {/* Passes down the auth stuffs to children */}
-        {user ? <SignedInStack /> : <SignedOutStack />}
+        {user ? <SignedOutStack /> : <SignedInStack />}
       </AuthProvider>
     </NavigationContainer>
   );

@@ -24,6 +24,7 @@ export default function Member({member, containerStyle}) {
                 />
                 <View style={{marginLeft: 20}}>
                     <Text style={{fontSize: 16, color: 'gray'}}>{member.name}</Text>
+                    <Text style={{fontSize: 16, color: 'gray'}}>{member.email}</Text>
                 </View>
             </TouchableOpacity> 
         </View>

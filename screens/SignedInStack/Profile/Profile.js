@@ -19,7 +19,7 @@ export default function Profile({navigation}) {
                             {/* Exco sign */}
                             {exco ? (
                                 <View style={{backgroundColor: '#ef018a', borderRadius: 4, position: 'absolute', top: 20, right: -15 }}>
-                                    <Text style={{color: '#fff', paddingHorizontal: 8, padding: 2}}>Pro</Text> 
+                                    <Text style={{color: '#fff', paddingHorizontal: 8, padding: 2}}>exco</Text> 
                                 </View>
                             ):(
                                 <></>

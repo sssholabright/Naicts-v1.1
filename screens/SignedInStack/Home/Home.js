@@ -11,7 +11,7 @@ import useAuth from '../../SignedOutStack/authHooks/useAuth'
 export default function Home({navigation}) {
     const [bookmark, setBookmark] = useState(false)
 
-    const { logout } = useAuth()
+    const { logout, user } = useAuth()
 
     let today = new Date().toUTCString().slice(0, 16)
 

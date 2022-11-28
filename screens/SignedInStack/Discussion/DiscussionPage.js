@@ -1,21 +1,56 @@
 import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Icon from '@expo/vector-icons/Ionicons'
-import { discussion } from '../AllTempData'
+//import { discussion } from '../AllTempData'
 import Discuss from './Discuss'
 
-export default function DiscussionPage({navigation}) {
+export default function DiscussionPage({navigation, route}) {
     const [message, setMessage] = useState("")
+    const [discussion, setDiscussion] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false) 
+    const [error, setError] = useState(null)
+
+    const created = route.params.post;
+   /* 
+    const addMessage = () => {
+
+
+        const newMessage = {
+            id: discussion.length + 1,
+            message: message,
+            time: new Date().toLocaleTimeString(),
+            date: new Date().toLocaleDateString(),
+            user: {
+                name: "Adeshola",
+                img: "https://lh3.googleusercontent.com/ogw/AOh-ky1Sjby9-jwcSEc7SEiltaNZ4lKozxlG1eGnUL9Wzg=s32-c-mo"
+            }
+        }
+        setDiscussion([...discussion, newMessage])
+        setMessage("")
+    }
+
+                    /*<FlatList
+                        data={discussion}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({item}) => <Discuss item={item} />}
+                        onRefresh={() => fetchDiscussion()}
+                        refreshing={refreshing}
+                        onEndReached={() => fetchDiscussion()}
+                        onEndReachedThreshold={0.5}
+                    />*/
+
+    
     return (
         <SafeAreaView>
             <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
             <View style={{backgroundColor: '#fff', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, minHeight: '16%',}}>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.goBack()}>
+                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('discussionforum')}>
                     <Icon name="chevron-back" size={24} />
                 </TouchableOpacity>
                 <View style={{alignItems: 'center'}}>
                     <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} /> 
-                    <Text style={{fontWeight: '700', fontSize: 20}}>Morning Meditators</Text>
+                    <Text style={{fontWeight: '700', fontSize: 20}}>{created.title}</Text>
                     <Text style={{fontSize: 14, color: 'gray'}}>85 members</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.9}>

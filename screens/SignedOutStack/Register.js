@@ -13,6 +13,7 @@ export default function Register({navigation}) {
 
     const { loading, register } = useAuth()
 
+
     return (
         <SafeAreaView>
             <StatusBar barStyle="dark-content" backgroundColor="#fff" />

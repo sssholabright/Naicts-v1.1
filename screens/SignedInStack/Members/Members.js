@@ -1,13 +1,51 @@
 import { FlatList, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
-import { members } from '../AllTempData'
 import Member from './Member'
+import { db } from '../../SignedOutStack/authHooks/firebase'
+import { addDoc, collection, getDocs, query, where } from 'firebase/firestore'
+import useAuth from '../../SignedOutStack/authHooks/useAuth'
 
 export default function Members({navigation}) {
     const [search, setSearch] = useState("")
+    const [membersList, setMembersList] = useState([])
+    const [loading, setLoading] = useState(false)
 
-    return (
+    const { user } = useAuth()        
+
+    useEffect(() => {
+        const getMembers = async () => {
+            setLoading(true)
+
+            const membersCollection = collection(db, 'members')
+            const membersSnapshot = await getDocs(membersCollection)
+            const membersList = membersSnapshot.docs.map(doc => doc.data())
+            setMembersList(membersList)
+            setLoading(false)
+        }
+        getMembers()
+    }, [user])
+
+
+    /*useEffect(() => {
+        const fetchMembers = async () => {
+            try {
+                const memberRef = await addDoc(collection(db, "members"), {
+                    name: "Adeshola",
+                    email: "adejobimujeeb5@gmail.com",	
+                    img: "https://lh3.googleusercontent.com/ogw/AOh-ky1Sjby9-jwcSEc7SEiltaNZ4lKozxlG1eGnUL9Wzg=s32-c-mo",
+                    id: "8b8b8b8b-8b8b-8b8b-8b8b-8b8b8b8b8b8b"
+                })
+                console.log("Document written with ID: ", memberRef.id);
+            } catch (error) {
+                console.error("Error adding document: ", error);
+            }
+        }
+        fetchMembers()
+    }, [user])*/
+  
+/*{!loading ? <Text>Loading...</Text> : (*/
+    return(
         <SafeAreaView style={styles.container}>
             <StatusBar />
             <ScrollView showsVerticalScrollIndicator={false} style={styles.bodyContainer}>
@@ -34,9 +72,9 @@ export default function Members({navigation}) {
 
                 {/* Members SECTION */}
                     <FlatList 
-                        data={members} 
+                        data={membersList} 
                         listKey="Member" 
-                        keyExtractor={item => `Member-${item.id}`} 
+                        keyExtractor={(item) => item.id}
                         contentContainerStyle={{marginTop: 0}} 
                         renderItem={({item, index}) => (
                             <Member    
@@ -53,6 +91,8 @@ export default function Members({navigation}) {
         </SafeAreaView>
     )
 }
+
+                                
 
 const styles = StyleSheet.create({
     container: {

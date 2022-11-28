@@ -8,8 +8,9 @@ export default function MatricCheck({navigation}) {
     const MC = matric[5] + matric[6] === 'MC';
     const LS = matric[5] + matric[6] === 'LS';
     const IDEL = matric[4] + matric[5] + matric[6]  === 'XCS';
-    const DE = matric[2] + matric[3] + matric[4] + matric[5] + matric[6] + matric[7] === 'D/47CS' || 'D/47MC' || 'D/47LS' || 'D/7XLS' || 'D/7XCS' || 'D/7XMC';
+    //const DE = matric[2] + matric[3] + matric[4] + matric[5] + matric[6] + matric[7] === 'D/47CS' || 'D/47MC' || 'D/47LS' || 'D/7XLS' || 'D/7XCS' || 'D/7XMC';
     const check = CS || MC || LS || IDEL;
+
     
     function confirmation() {
         if (check) {

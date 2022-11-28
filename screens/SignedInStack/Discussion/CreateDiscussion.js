@@ -1,10 +1,29 @@
 import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons'
+import { addDoc, collection, getDocs, Timestamp } from 'firebase/firestore'
+import { db } from '../../SignedOutStack/authHooks/firebase'
+import useAuth from '../../SignedOutStack/authHooks/useAuth'
 
 export default function CreateDiscussion({navigation}) {
     const [discuss, setDiscuss] = useState("")
     const [discussDetails, setDiscussDetails] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const disabled = !discuss && !discussDetails;
+
+    const createDiscussion = async () => {
+        const discussion = {
+            title: discuss,
+            description: discussDetails,
+            createdAt: Timestamp.now().toDate().toString().slice(0, 24),
+        }
+        const discussionRef = await addDoc(collection(db, "discussions"), discussion)
+        setLoading(true)
+        console.log("Document written with ID: ", discussionRef.id);
+        console.error("Error adding document: ", error);
+        navigation.replace("discussionpage", {discussion})   
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -21,10 +40,10 @@ export default function CreateDiscussion({navigation}) {
                 </TouchableOpacity>
                 <View />
             </View>
-            <View>
+            <View style={{marginVertical: 10}}>
                 <TextInput 
                     style={styles.discussInput} 
-                    placeholder="Create Discussion" 
+                    placeholder="Discussion Title" 
                     value={discuss} 
                     onChangeText={(discuss) => setDiscuss(discuss)} 
                 />
@@ -32,21 +51,22 @@ export default function CreateDiscussion({navigation}) {
             <View>
                 <TextInput 
                     style={[styles.discussInput, {height: 100}]} 
-                    placeholder="Discussion Details" 
-                    placeholderTextColor={"gray"}
+                    placeholder="Discussion Topic" 
                     multiline={true}
+                    textAlignVertical="top"
                     value={discussDetails} 
                     onChangeText={(discussDetails) => setDiscussDetails(discussDetails)} 
                 />
             </View>
             <View>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('participant')} style={styles.createButton}>
-                    <Text style={{color: '#fff', fontWeight: '500', fontSize: 15, textTransform: 'uppercase', textAlign: 'center'}}>Create Discussion</Text>
+                <TouchableOpacity activeOpacity={0.9} onPress={createDiscussion} disabled={disabled} style={disabled ? [styles.createButton, {backgroundColor: 'gray'}] : styles.createButton}>
+                    <Text style={{color: '#fff', fontWeight: '500', fontSize: 15, textTransform: 'uppercase', textAlign: 'center'}}>{loading ? 'loading...' : 'Create Discussion'}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
 }
+
 
 const styles = StyleSheet.create({
     container: {
@@ -79,9 +99,11 @@ const styles = StyleSheet.create({
     },
 
     discussInput: {
-        backgroundColor: 'whitesmoke',
+        backgroundColor: 'white',
         marginVertical: 10,
-        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: 'lightgray',
+        borderRadius: 4,
         paddingLeft: 10,
         padding: 10,
         fontSize: 15,
@@ -98,6 +120,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#ef018a', 
         padding: 15, 
         marginTop: 20,
-        borderRadius: 10
+        borderRadius: 4
     }
 })
