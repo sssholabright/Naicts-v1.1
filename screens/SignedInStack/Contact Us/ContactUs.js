@@ -3,9 +3,8 @@ import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../SignedOutStack/authHooks/firebase';
-import AwesomeLoading from 'react-native-awesome-loading';
 
-export default function ContactUs() {
+export default function ContactUs({navigation}) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [message, setMessage] = useState("");
@@ -31,18 +30,18 @@ export default function ContactUs() {
 
     return (
         <KeyboardAvoidingView behaviour={"padding"} style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <StatusBar barStyle="light-content" backgroundColor="#ef018a"/>
+            <View style={{flexDirection: 'row', backgroundColor: '#ef018a', paddingHorizontal: 20, margin: -20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
                     {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#000' /> 
+                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
                     ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#000' />
+                        <Ionicons name="chevron-back" size={24} color='#fff' />
                     )}
                 </TouchableOpacity> 
                 <View style={{}}>
-                    <Text style={{fontSize: 18, letterSpacing: 0.5, fontWeight: '700'}}>CONTACT US</Text>
-                </View> 
+                    <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>CONTACT US</Text>
+                </View>  
                 <Text>{'        '}</Text>
             </View>
 
@@ -71,9 +70,7 @@ export default function ContactUs() {
                     onChangeText={(message) => setMessage(message)}
                 />
 
-                <AwesomeLoading 
-                 indicatorId={8} size={50} isActive={true} text="loading" 
-                />
+                
 
                 <TouchableOpacity activeOpacity={0.5} onPress={sendMessage} disabled={disabled} style={!disabled ? {backgroundColor: '#ef018a', padding: 10, borderRadius: 5, marginTop: 20}: {backgroundColor: 'gray', padding: 10, borderRadius: 5, marginTop: 20}}>
                     <Text style={{color: '#fff', fontSize: 16, fontWeight: '700', textAlign: 'center'}}>{loading ? 'Loading...': 'Send Message'}</Text>

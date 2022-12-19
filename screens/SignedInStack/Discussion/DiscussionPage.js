@@ -1,119 +1,116 @@
-import { Dimensions, FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
+import React, { useCallback, useEffect, useState } from 'react'
 import Icon from '@expo/vector-icons/Ionicons'
-//import { discussion } from '../AllTempData'
-import Discuss from './Discuss'
+import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat'
+import { auth, db } from '../../SignedOutStack/authHooks/firebase'
+import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
+
 
 export default function DiscussionPage({navigation, route}) {
-    const [message, setMessage] = useState("")
-    const [discussion, setDiscussion] = useState([])
-    const [loading, setLoading] = useState(false)
-    const [refreshing, setRefreshing] = useState(false) 
-    const [error, setError] = useState(null)
+    const [messages, setMessages] = useState([]);
 
-    const created = route.params.post;
-   /* 
-    const addMessage = () => {
-
-
-        const newMessage = {
-            id: discussion.length + 1,
-            message: message,
-            time: new Date().toLocaleTimeString(),
-            date: new Date().toLocaleDateString(),
-            user: {
-                name: "Adeshola",
-                img: "https://lh3.googleusercontent.com/ogw/AOh-ky1Sjby9-jwcSEc7SEiltaNZ4lKozxlG1eGnUL9Wzg=s32-c-mo"
-            }
-        }
-        setDiscussion([...discussion, newMessage])
-        setMessage("")
-    }
-
-                    /*<FlatList
-                        data={discussion}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({item}) => <Discuss item={item} />}
-                        onRefresh={() => fetchDiscussion()}
-                        refreshing={refreshing}
-                        onEndReached={() => fetchDiscussion()}
-                        onEndReachedThreshold={0.5}
-                    />*/
-
+    const { title, id } = route.params;
     
+    useEffect(() => {
+        const q = query(collection(db, 'discussions', id, 'chats'), orderBy('createdAt', 'desc'));
+        const unsubscribe = onSnapshot(q, (snapshot) => setMessages(
+            snapshot.docs.map(doc => ({
+                _id: doc.data()._id,
+                createdAt: doc.data().createdAt.toDate(),
+                text: doc.data().text,
+                user: doc.data().user,
+            }))
+        ));
+        return unsubscribe;
+    }, []);
+
+
+    const onSend = useCallback((messages = []) => {
+        setMessages((previousMessages) =>
+            GiftedChat.append(previousMessages, messages),
+        );
+
+        const { _id, createdAt, text, user } = messages[0]; 
+        addDoc(collection(db, 'discussions', id, 'chats'), {
+            _id, 
+            createdAt,
+            text, 
+            user 
+        });
+    }, []);
+
+    const renderSend = (props) => {
+        return (
+            <Send {...props}>
+                <View>
+                    <MaterialCommunityIcons
+                        name="send-circle"
+                        style={{marginBottom: 5, marginRight: 5}}
+                        size={35}
+                        color="#f25fb9"
+                    />
+                </View>
+            </Send>
+        );
+    };
+
+    const renderBubble = (props) => {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    right: {
+                        backgroundColor: '#f25fb9',
+                    },
+                }}
+                textStyle={{
+                    right: {
+                        color: '#fff',
+                    },
+                }}
+            />
+        );
+    };
+
+    const scrollToBottomComponent = () => {
+        return(
+            <FontAwesome name='angle-double-down' size={22} color='#333' />
+        );
+    }
+            
     return (
-        <SafeAreaView>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
+        <SafeAreaView style={{height: '100%'}}>
+            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
             <View style={{backgroundColor: '#fff', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, minHeight: '16%',}}>
                 <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('discussionforum')}>
                     <Icon name="chevron-back" size={24} />
                 </TouchableOpacity>
                 <View style={{alignItems: 'center'}}>
                     <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} /> 
-                    <Text style={{fontWeight: '700', fontSize: 20}}>{created.title}</Text>
+                    <Text style={{fontWeight: '700', fontSize: 20}}>{title}</Text>
                     <Text style={{fontSize: 14, color: 'gray'}}>85 members</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.9}>
                     <Icon name="md-notifications-outline" size={24} />
                 </TouchableOpacity>
             </View>
-            <ScrollView style={{height: '84%'}}>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Mario   <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
-                <View style={{marginVertical: 10, marginHorizontal: 20, flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={require('../../../assets/2.jpg')} style={{width: 50, height: 50, borderRadius: 50}} />
-                    <View style={{marginHorizontal: 10, width: 250}}>
-                        <Text style={{fontWeight: '700', fontSize: 15}}>Anna  <Text style={{backgroundColor: '#fff', fontSize: 10, fontWeight: '500', borderRadius: 10, }}>   ADMIN   </Text> <Text style={{fontWeight: '400', fontSize: 12, color: 'gray'}}>38 mins ago</Text></Text>
-                        <Text style={{fontWeight: '400', fontSize: 15}}>Looking forward to the next group medid at ai on. Loved the last one!</Text>
-                    </View>
-                </View>
 
-                {/* Members Discussions */}
-                <View style={{marginVertical: 10, marginHorizontal: 20, backgroundColor: 'whitesmoke'}}>
-                    <FlatList 
-                        showsVerticalScrollIndicator={false}
-                        data={discussion} 
-                        listKey="Discuss" 
-                        keyExtractor={item => `Discuss-${item.id}`} 
-                        contentContainerStyle={{marginTop: 0}} 
-                        renderItem={({item, index}) => (
-                            <Discuss    
-                                discuss={item} 
-                            />
-                        )}
-                        ItemSeparatorComponent={() => (
-                            <View style={{height: 1, width: '100%', backgroundColor: 'lightgray', marginVertical: 10}} />
-                        )}
-                    />
-                 </View>   
-                
-            <View style={{height: 100}} />
-            </ScrollView>
-
-            {/* Message SECTION */}
-            <View style={{flexDirection: 'row', paddingHorizontal: 20,  paddingBottom: 20, paddingTop: 10,  width: '100%', justifyContent: 'space-between', position: 'absolute', bottom: 0, backgroundColor: '#fff'}}>
-                
-                {/* Message Box */}
-                <View style={{flexDirection: 'row', alignItems: 'center', padding: 5, paddingHorizontal: 10, backgroundColor: 'whitesmoke', width: '100%', borderRadius: 25}}>
-                    <TextInput 
-                        placeholder="Message..." 
-                        style={{ flex: 1, fontSize: 16, padding: 5 }}
-                        multiline 
-                        value={message} 
-                        onChangeText={(message) => setMessage(message)} 
-                    />
-                    <TouchableOpacity activeOpacity={0.5}>
-                        <Icon name="send" size={20} color="gray" />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            <GiftedChat
+                messages={messages}
+                onSend={(messages) => onSend(messages)}
+                user={{
+                    _id: auth.currentUser.uid,
+                    name: auth.currentUser.email,
+                }}
+                textInputStyle={{backgroundColor: '#fff', borderRadius: 20, borderWidth: 1, borderColor: '#ccc', height: 50, paddingHorizontal: 10, paddingVertical: 5, fontSize: 15, color: '#000'}}
+                renderBubble={renderBubble}
+                alwaysShowSend
+                renderSend={renderSend}
+                renderUsernameOnMessage={true}
+                scrollToBottom
+                scrollToBottomComponent={scrollToBottomComponent}
+            />
         </SafeAreaView>
     )
 }
-
-const styles = StyleSheet.create({})

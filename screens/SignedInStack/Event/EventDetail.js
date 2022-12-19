@@ -1,4 +1,4 @@
-import { Image, ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ImageBackground, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -80,9 +80,9 @@ export default function EventDetail({route, navigation}) {
             <View style={{height: 60}} />
 
             <View style={[{ position: 'absolute', bottom: 10, alignSelf: 'center', height: '8%', width: '100%', justifyContent: 'center', alignItems: 'center'}, styles.shadow]}>
-                <TouchableOpacity activeOpacity={0.8} style={[{width: '100%', flexDirection: 'row', height: '90%', backgroundColor: '#ef018a', borderRadius: 25, justifyContent: 'center', alignItems: 'center'}, styles.shadow]}>
+                <TouchableOpacity activeOpacity={0.8} style={[{width: '100%', flexDirection: 'row', height: '90%', backgroundColor: '#f25fb9', borderRadius: 25, justifyContent: 'center', alignItems: 'center'}, styles.shadow]}>
                     <MaterialCommunityIcons name="chevron-triple-right" size={20} color="#fff" />
-                    <Text style={{fontSize: 12, fontWeight: '500', letterSpacing: 1, color: 'white', textTransform: 'uppercase'}}> {detail.price === "Free" ? "Free" : 'Buy Ticket - $'+detail.price}</Text>
+                    <Text style={{fontSize: 12, fontWeight: '500', letterSpacing: 1, color: 'white', textTransform: 'uppercase'}}> {detail.price === "free" ? "Free" : 'Buy Ticket - $'+detail.price}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

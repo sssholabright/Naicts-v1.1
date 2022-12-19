@@ -7,27 +7,33 @@ import { Items } from '../AllTempData';
 export default function MarketPlace({navigation}) {
     return (
         <View style={{ flex: 1, backgroundColor: '#fff'}}>
-            <StatusBar backgroundColor={'#fff'} barStyle="dark-content" />
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <StatusBar backgroundColor="#f25fb9" barStyle="light-content" />
 
                 {/* Header Icons (basket and cart) */}
-                <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', padding: 16}}>
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 10, backgroundColor: '#F0F0F3'}} onPress={() => navigation.goBack()}>
-                        {Platform.OS === "android" ? (
-                            <Ionicons name="arrow-back" size={24} color='gray' /> 
-                        ): Platform.OS === "ios" (
-                            <Ionicons name="chevron-back" size={24} color='gray' />
-                        )}
-                    </TouchableOpacity>
-                </View>
+            <View style={{flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
+                    {Platform.OS === "android" ? (
+                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
+                    ): Platform.OS === "ios" (
+                        <Ionicons name="chevron-back" size={24} color='#fff' />
+                    )}
+                </TouchableOpacity> 
+                <View style={{}}>
+                    <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>MARKETPLACE</Text>
+                </View>  
+                <Text>{'        '}</Text>
+            </View>
+       
+        
+        <ScrollView showsVerticalScrollIndicator={false}>
 
                 {/* Header Description */}
                 <View style={{marginBottom: 10, padding: 15}}>
                     <Text style={{ fontSize: 26, color: '#000', fontWeight: '500', letterSpacing: 1, marginBottom: 10}}>
                         ICT E-Marketplace Advertise & Service
                     </Text>
-                    <Text style={{ fontSize: 14, color: '#000', fontWeight: '400', letterSpacing: 1, lineHeight: 24}}>
-                        Audio shop on Rustaveli Ave 57.
+                    <Text style={{ fontSize: 14, color: '#000', fontWeight: '400', letterSpacing: 0.2, lineHeight: 24}}>
+                        ICT E-Marketplace is a great way to reach your target audience.{'\n'}You can advertise your products and services to a large audience of ICT professionals and students.{'\n'}
                         {'\n'}This platform offers both products and services
                     </Text>
                 </View>

@@ -1,9 +1,8 @@
-import { SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo } from '@expo/vector-icons'
-import { addDoc, collection, getDocs, Timestamp } from 'firebase/firestore'
+import { addDoc, collection, Timestamp } from 'firebase/firestore'
 import { db } from '../../SignedOutStack/authHooks/firebase'
-import useAuth from '../../SignedOutStack/authHooks/useAuth'
 
 export default function CreateDiscussion({navigation}) {
     const [discuss, setDiscuss] = useState("")
@@ -13,16 +12,20 @@ export default function CreateDiscussion({navigation}) {
     const disabled = !discuss && !discussDetails;
 
     const createDiscussion = async () => {
-        const discussion = {
+        setLoading(true)
+        await addDoc(collection(db, "discussions"), {
             title: discuss,
             description: discussDetails,
+            id: Math.random().toString(36).substring(7),
             createdAt: Timestamp.now().toDate().toString().slice(0, 24),
-        }
-        const discussionRef = await addDoc(collection(db, "discussions"), discussion)
-        setLoading(true)
-        console.log("Document written with ID: ", discussionRef.id);
-        console.error("Error adding document: ", error);
-        navigation.replace("discussionpage", {discussion})   
+        })
+        .then(() => {
+            setLoading(false)
+            navigation.navigate("discussionpage", { title: discuss, description: discussDetails, id: Math.random().toString(36).substring(7), createdAt: Timestamp.now().toDate().toString().slice(0, 24) })
+        })
+        .catch((error) => {
+            alert(error)
+        })
     }
 
     return (
@@ -40,10 +43,13 @@ export default function CreateDiscussion({navigation}) {
                 </TouchableOpacity>
                 <View />
             </View>
+            <View>
+                
+            </View>
             <View style={{marginVertical: 10}}>
                 <TextInput 
                     style={styles.discussInput} 
-                    placeholder="Discussion Title" 
+                    placeholder="Discussion Topic" 
                     value={discuss} 
                     onChangeText={(discuss) => setDiscuss(discuss)} 
                 />
@@ -51,7 +57,7 @@ export default function CreateDiscussion({navigation}) {
             <View>
                 <TextInput 
                     style={[styles.discussInput, {height: 100}]} 
-                    placeholder="Discussion Topic" 
+                    placeholder="Discussion Details" 
                     multiline={true}
                     textAlignVertical="top"
                     value={discussDetails} 
@@ -60,7 +66,7 @@ export default function CreateDiscussion({navigation}) {
             </View>
             <View>
                 <TouchableOpacity activeOpacity={0.9} onPress={createDiscussion} disabled={disabled} style={disabled ? [styles.createButton, {backgroundColor: 'gray'}] : styles.createButton}>
-                    <Text style={{color: '#fff', fontWeight: '500', fontSize: 15, textTransform: 'uppercase', textAlign: 'center'}}>{loading ? 'loading...' : 'Create Discussion'}</Text>
+                    <Text style={{color: '#fff', fontWeight: '500', fontSize: 15, textTransform: 'uppercase', textAlign: 'center'}}>{loading ? <ActivityIndicator size='small' color="#f25fb9" /> : 'Create Discussion'}</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

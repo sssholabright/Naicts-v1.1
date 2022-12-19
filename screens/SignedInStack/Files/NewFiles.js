@@ -1,10 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
-export default function NewFiles({file, navigation}) {
+export default function NewFiles({file, navigation, onPress}) {
     return (
-        <TouchableOpacity activeOpacity={0.5} style={{backgroundColor: 'white', width: 80, height: 100, borderRadius: 10, marginHorizontal: 10, alignItems: 'center', justifyContent: 'center'}}>
+        <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={{backgroundColor: 'white', width: 80, height: 100, borderRadius: 10, marginHorizontal: 10, alignItems: 'center', justifyContent: 'center'}}>
             <MaterialCommunityIcons name="file" size={40} color={file.color}  />
             <Text style={{fontSize: 10, marginTop: 10}}>{file.title}</Text>
         </TouchableOpacity>
@@ -20,5 +20,3 @@ export function Folder({folder, onPress}) {
         </TouchableOpacity>
     )
 }
-
-const styles = StyleSheet.create({})

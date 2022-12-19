@@ -36,7 +36,7 @@ export default function FilesList({route, navigation}) {
                 </View>
 
                 {/* Files List */}
-                <Text style={{fontSize: 18, fontWeight: '500', letterSpacing: 0.5, marginTop: 20}}>Folders</Text>
+                <Text style={{fontSize: 18, fontWeight: '500', letterSpacing: 0.5, marginTop: 20}}>Materials</Text>
                 <FlatList 
                     showsVerticalScrollIndicator={false}
                     data={newFiles} 

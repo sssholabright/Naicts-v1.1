@@ -164,32 +164,38 @@ export const members = [
     {
         id: 0,
         img: require('../../assets/me.jpg'),
-        name: 'Mujeeb Adejobi'
+        name: 'Mujeeb Adejobi',
+        department: "Computer Science"
     },
     {
         id: 1,
         img: require('../../assets/ife.jpg'),
-        name: 'Ifeoluwa Babatunde'
+        name: 'Ifeoluwa Babatunde',
+        department: "Library Science"
     },
     {
         id: 2,
         img: require('../../assets/ola1.jpg'),
-        name: 'Olamide Ayoola'
+        name: 'Olamide Ayoola',
+        department: "Mass Communication"
     },
     {
         id: 3,
         img: require('../../assets/ola2.jpg'),
-        name: 'Kabirat Olamide'
+        name: 'Kabirat Olamide',
+        department: "Library Science"
     },
     {
         id: 4,
         img: require('../../assets/ola3.jpg'),
-        name: 'Olamide Ayoola'
+        name: 'Olamide Ayoola',
+        department: "Computer Science"
     },
     {
         id: 5,
         img: require('../../assets/bili.jpg'),
-        name: 'Balikis Yahya'
+        name: 'Balikis Yahya',
+        department: "Mass Communication"
     },
 ]
 
@@ -244,49 +250,65 @@ export const events = [
         id: 0,
         img: require('../../assets/thumbnail_1.png'),
         title: "Live Music Monato",
+        venue: "Mini Convacation Arena",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        organizer: "Mujeeb Adejobi",
         time: '07:30 PM',
         eventUsers: [
             require('../../assets/bili.jpg'),
             require('../../assets/ife.jpg'),
             require('../../assets/ola3.jpg'),
         ],
+        price: 'free',
         joined: '+3.6K'
     },
     {
         id: 1,
         img: require('../../assets/thumbnail_2.png'),
         title: "Live Full Bass",
+        venue: "Westend",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        organizer: "Mujeeb Adejobi",
         time: '07:30 PM',
         eventUsers: [
             require('../../assets/ola1.jpg'),
             require('../../assets/ife.jpg'),
             require('../../assets/me.jpg'),
         ],
+        price: 1750,
         joined: '+3.6K'
     },
     {
         id: 2,
         img: require('../../assets/thumbnail_3.png'),
         title: "Freshers Night",
+        venue: "Mini Convacation Arena",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        organizer: "Social Director",
         time: '10:00 PM',
         eventUsers: [
             require('../../assets/ola2.jpg'),
             require('../../assets/ola1.jpg'),
             require('../../assets/2.jpg'),
         ],
-        joined: '+3.6K'
+        joined: '+3.6K',
+        price: 750,
     },
     {
         id: 3,
         img: require('../../assets/thumbnail_4.png'),
         title: "Awareness",
+        venue: "Mini Convacation Arena",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        organizer: "Mujeeb Adejobi",
         time: '01:30 PM',
         eventUsers: [
             require('../../assets/bili.jpg'),
             require('../../assets/ife.jpg'),
             require('../../assets/ola3.jpg'),
         ],
-        joined: '+1.6K'
+        joined: '+1.6K',
+        price: 200,
   },    
 ]
 

@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-export default function LostAndFound() {
-  return (
-    <View>
-      <Text>LostAndFound</Text>
-    </View>
-  )
+export default function Admin() {
+    return (
+        <View>
+            <Text>Admin</Text>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({})

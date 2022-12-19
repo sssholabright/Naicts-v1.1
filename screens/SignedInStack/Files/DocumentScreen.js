@@ -5,6 +5,7 @@ import NewFiles, { Folder } from './NewFiles'
 import { folders, newFiles } from '../AllTempData'
 
 export default function DocumentScreen({navigation}) {
+
   return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="whitesmoke" />
@@ -24,6 +25,7 @@ export default function DocumentScreen({navigation}) {
                     <Text>{'      '}</Text>
                 </View>
 
+
                 {/* Search SECTION */}
                 <View style={[{ marginVertical: 20, backgroundColor: '#fff', borderWidth: 1, borderColor: 'lightgray', borderRadius: 50, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15}, styles.shadow]}>
                     <Ionicons name="search" size={18} color="gray" />
@@ -33,6 +35,7 @@ export default function DocumentScreen({navigation}) {
                     />
                 </View>
 
+                
                 {/* Recent Files SECTION */}
                 <Text style={{fontSize: 18, fontWeight: '500', letterSpacing: 0.5}}>Recent Files</Text>
                 <FlatList 
@@ -45,7 +48,7 @@ export default function DocumentScreen({navigation}) {
                     renderItem={({item, index}) => (
                         <NewFiles
                             file={item}
-                            //onPress={() => navigation.navigate('eventdetail', {detail: item})}
+                            //onPress={path}
                         />
                     )}
                 />

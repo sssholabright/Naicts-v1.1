@@ -1,172 +1,176 @@
-import { Dimensions, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect, useState } from 'react'
-import Icon from '@expo/vector-icons/Ionicons'
+import { View, Text, SafeAreaView, StatusBar, ScrollView, Image, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { auth, db } from '../../SignedOutStack/authHooks/firebase'
+import { doc, getDoc } from 'firebase/firestore'
+import moment from 'moment'
 
 export default function Profile({navigation}) {
-    const [exco, setExco] = useState(true);
+    const [profileDetail, setProfileDetail] = useState([])
+    const [loading, setLoading] = useState(true)
+    const { user } = auth.currentUser;
+
+    useEffect(() => {
+        const getProfileDetails = async () => {
+            const profileDetailsCollection = doc(db, 'users', auth.currentUser.uid)  
+            const profileDetailsSnapshot = await getDoc(profileDetailsCollection)
+            if (profileDetailsSnapshot.exists()) {
+                setProfileDetail(profileDetailsSnapshot.data())
+                setLoading(false)
+            } else {
+                console.log("No such document!");
+            }
+        }
+        getProfileDetails()
+        console.log(profileDetail)
+    }, [user])
+
+
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{height: '100%', backgroundColor: '#fff'}}>
             <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <ScrollView>
-                {/* Header Container consists of image, exco sign, settings and names */}
-                <View style={styles.headerContainer}>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 30}}>
-                        <View />
-                        <TouchableOpacity style={styles.profilePic} activeOpacity={0.9}>
-                            {/*image section */}
-                            <Image style={{width: 100, height: 100, borderRadius: 20}} source={require('../../../assets/me.jpg')} />
-                            {/* Exco sign */}
-                            {exco ? (
-                                <View style={{backgroundColor: '#ef018a', borderRadius: 4, position: 'absolute', top: 20, right: -15 }}>
-                                    <Text style={{color: '#fff', paddingHorizontal: 8, padding: 2}}>exco</Text> 
-                                </View>
-                            ):(
-                                <></>
-                            )}
-                        </TouchableOpacity>   
-                        {/* Settings Icon Section */}                 
-                        <TouchableOpacity activeOpacity={0.8}>
-                            <Icon name='settings-outline' size={24} color='gray' />
-                        </TouchableOpacity>
-                    </View>
-                    {/* Name section */}
-                    <View style={{ alignItems: 'center', marginBottom: 20}}>
-                        <Text style={{fontWeight: '700', fontSize: 20, color: "#1c1c1c"}}>Mujeeb Adejobi</Text>
-                        <Text style={{fontWeight: '500', fontStyle: 'italic', color: "gray"}}>Class of 2023, Computer Science</Text> 
-                    </View>
-                    <View style={{justifyContent: 'center', alignItems: 'center', alignSelf: 'center', marginBottom: 30}}>
-                        <TouchableOpacity activeOpacity={0.6} style={styles.messageButton}>
-                            <Text style={{color: 'gray', fontSize: 13}}>Message</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-
-                {/* Body Container consists of Personal Info, */}
-                <View style={styles.otherSection}>
-                    <Text style={{fontWeight: '700', fontSize: 15, marginBottom: 10}}>User Informations</Text>
-                    <View>
-                        <Text style={styles.info}>Male</Text>
-                        <Text style={styles.info}>100 level</Text>
-                        <Text style={styles.info}>Computer Science</Text>
-                        <Text>{"({`Progress bar`})"}</Text>
-                    </View>
-                </View>
-                <View style={styles.groupContainer}>
-                    <Text style={{fontWeight: '700', fontSize: 18}}>Member of Group</Text>
-                    <TouchableOpacity activeOpacity={0.7} style={styles.group}>
-                        <View style={styles.imageContainer}>
-                            <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/naicts.jpg')}  />
+            <View style={{alignItems: 'center', justifyContent: 'center', padding: 15}}>
+                <Text style={{fontWeight: '700', fontSize: 18}}>PROFILE</Text>
+            </View> 
+            {loading ? (
+                <Text>Loading...</Text> 
+            ) : (
+                <ScrollView showsVerticalScrollIndicator={false} style={{padding: 20}}>
+                    <View style={{padding: 20, backgroundColor: '#000', borderRadius: 10}}>
+                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                            <TouchableOpacity activeOpacity={0.5}  /*onPress={takePhotoFromCamera}*/ style={{marginHorizontal: 10}}>
+                                <Image source={require('../../../assets/me.jpg')} style={{width: 70, height: 70, borderRadius: 50}} />
+                            </TouchableOpacity>
+                            <View style={{marginHorizontal: 10}}>
+                                <Text style={{color: '#fff', fontWeight: '700', fontSize: 18}}>{profileDetail.firstName} {profileDetail.lastName}</Text>
+                                <Text style={{color: 'gray', fontWeight: '500', fontSize: 13}}>Computer Science</Text>
+                            </View>
                         </View>
-                        <View>
-                            <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '700', fontSize: 14}}>NAICTS</Text>
-                            <Text style={{color: "gray", marginLeft: 10, fontWeight: '700', fontSize: 8, marginTop: 5}}>National Information and Communication Technology Students</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.7} style={styles.group}>
-                    <View style={styles.imageContainer}>
-                        <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
-                    </View>
-                    <View>
-                        <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '700', fontSize: 14}}>NACOSS</Text>
-                        <Text style={{color: "gray", marginLeft: 10, fontWeight: '700', fontSize: 8, marginTop: 5}}>National Association of Computer Science Students</Text>
-                    </View>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.account}>
-                <TouchableOpacity activeOpacity={0.7} style={styles.accountContain} onPress={() => navigation.navigate('editprofile')}>
-                    <Icon name='person' size={24} color='gray' />
-                    <Text style={{marginLeft: 10}}>My Account</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
-  )
+
+                        <View style={{flexDirection: 'row', justifyContent: 'space-around', marginVertical: 20, borderBottomWidth: 1, borderColor: 'gray'}}>
+                            <View>
+                                <Text style={{color: 'gray', fontSize: 15, fontWeight: '500'}}>Level</Text>
+                                <Text style={{color: '#fff', fontSize: 15, fontWeight: '500'}}>400</Text>
+                            </View>       
+                            <View style={{height: 50, width: 1, backgroundColor: 'gray', }} />
+                                <View>
+                                    <Text style={{color: 'gray', fontSize: 15, fontWeight: '500'}}>Date Joined</Text>
+                                    <Text style={{color: '#fff', fontSize: 15, fontWeight: '500'}}>{moment(profileDetail.createdAt).format('DD MMM YYYY')}</Text>
+                                </View>                    
+                            </View>
+
+                            {/* Educational Details SECTION */}
+                            <View style={{ marginVertical: 10, borderColor: 'gray', borderRadius: 5, borderWidth: 1, padding: 10}}>
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Matric No:</Text>
+                                    <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>{profileDetail.matric}</Text>
+                                </View>  
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Department:</Text>
+                                    <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>Computer Science</Text>
+                                </View> 
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Level:</Text>
+                                    <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>400 Level</Text>
+                                </View>  
+                            </View>
+                            <View>
+                                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('settings')} style={{backgroundColor: 'gray', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
+                                    <Text style={{color: '#fff', fontSize: 14, fontWeight: '500'}}>ACCOUNT SETTINGS</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>          
+
+                        {/* Biography SECTION */}
+                        {!profileDetail.bio ? null :
+                            <View style={{marginVertical: 10, borderColor: 'lightgray', borderWidth: 1, borderRadius: 10, padding: 20}}>
+                                <Text style={{fontSize: 15, fontWeight: '500'}}>Bio:</Text>
+                                <Text style={{color: 'gray', fontSize: 12, fontWeight: '500', marginTop: 5}}>{profileDetail.bio/*I was born in NY but raised in Argentina and Miami. For work.*/}</Text>
+                            </View>  
+                        }
+
+                        {/* Personal Details SECTION */}
+                        <View style={{marginVertical: 10, borderColor: 'lightgray', borderWidth: 1, borderRadius: 10, padding: 20}}>
+                            <Text style={{fontSize: 15, fontWeight: '500'}}>Personal Details:</Text>
+
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Name:</Text>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.firstName} {profileDetail.lastName}</Text>
+                            </View>
+
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Gender:</Text>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>male</Text>
+                            </View> 
+
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Email address:</Text>
+                                <Text style={{textTransform: 'lowercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.email}</Text>
+                            </View>  
+
+                            {!profileDetail.phone ? null :
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Phone Number:</Text>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.phone}</Text>
+                                </View>  
+                            }
+
+                            {!profileDetail.portfolio ? null :
+                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Portfolio:</Text>
+                                    <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.portfolio}</Text>
+                                </View>  
+                            }
+                        </View>
+
+                        {/* Group SECTION */}
+                        <View style={{marginVertical: 10, borderColor: 'lightgray', borderWidth: 1, borderRadius: 10, padding: 20}}>
+                            <Text style={{fontWeight: '500', fontSize: 15}}>Member of Association:</Text>
+                            <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                <View>
+                                    <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/naicts.jpg')}  />
+                                </View>
+                            <View>
+                                <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '500', fontSize: 14}}>NAICTS</Text>
+                                <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, lineHeight: 12, marginTop: 2}}>National Association Information and Communication Technology{'\n'}Students</Text>
+                            </View>
+                        </View>
+                        <View style={{height: 1, backgroundColor: 'whitesmoke'}} />
+                        {profileDetail.department === "Computer Science" ? (
+                            <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                <View>
+                                    <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
+                                </View>
+                                <View>
+                                    <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '500', fontSize: 14}}>NACOS</Text>
+                                    <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, marginTop: 2}}>National Association of Computing Students</Text>
+                                </View>
+                            </View>
+                        ) : profileDetail.department === "Library and Information Science" ? (
+                            <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                <View>
+                                    <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
+                                </View>
+                                <View>
+                                    <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '500', fontSize: 14}}>NALISS</Text>
+                                    <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, marginTop: 2}}>National Association of Computing Students</Text>
+                                </View>
+                            </View>
+                        ) : profileDetail.department === "Mass Communication" ? (
+                            <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
+                                <View>
+                                    <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
+                                </View>
+                                <View>
+                                    <Text style={{color: "#1c1c1c", marginLeft: 10, fontWeight: '500', fontSize: 14}}>MACOSA</Text>
+                                    <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, marginTop: 2}}>National Association of Computing Students</Text>
+                                </View>
+                            </View>
+                        ) : null}
+                    </View>    
+                    <View style={{height: 50}} />                            
+                </ScrollView>
+            )}    
+        </SafeAreaView>
+    )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: '#fff',
-        height: '100%'
-    },
-
-    headerContainer: {
-        borderBottomRightRadius: 20, 
-        borderBottomLeftRadius: 20, 
-        borderBottomWidth: 1,
-        borderRightWidth: 1,
-        borderLeftWidth: 1,
-        borderColor: 'lightgray'
-    },
-
-    profilePic: {
-        marginLeft: 30,
-        marginBottom: -20,
-        alignItems: 'center',
-    },
-
-    messageButton: {
-        paddingHorizontal: 30,
-        paddingVertical: 10, 
-        backgroundColor: 'transparent',
-        borderRadius: 5,
-        borderWidth: 1,
-        borderColor: 'lightgray'
-    },
-
-    otherSection: {
-        marginVertical: 10,
-        marginHorizontal: 20,
-        padding: 20,
-        borderRadius: 10,
-        backgroundColor: 'whitesmoke',
-        borderWidth: 1,
-        borderColor: 'lightgray'
-    },
-
-    info: {
-        marginVertical: 1,
-    },
-
-    groupContainer: {
-        marginVertical: 10,
-        marginHorizontal: 20,
-        
-    },
-
-    group: {
-        borderRadius: 10,
-        paddingHorizontal: 20,
-        paddingVertical: 10, 
-        marginVertical: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: 'whitesmoke',
-        borderWidth: 1,
-        borderColor: 'lightgray'
-         
-    },
-
-    imageContainer: {
-        backgroundColor: "whitesmoke", 
-        padding: 6, 
-        borderRadius: 20,
-    },
-
-    account: {
-        marginHorizontal: 20,
-        backgroundColor: 'whitesmoke',
-        borderWidth: 1,
-        borderColor: 'lightgray',
-        borderRadius: 10,
-    },
-    
-    accountContain: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-    }
-     
-
-})

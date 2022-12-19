@@ -7,7 +7,7 @@ export default function EventCard({card, containerStyle, onPress}) {
         <View style={[{backgroundColor: '#fff', height: 250, borderRadius: 15, marginHorizontal: 10}, styles.shadow]}>
             <ImageBackground 
                 resizeMode="cover" 
-                source={card?.img} 
+                source={card.img} 
                 style={{
                     width: 280, 
                     height: 180, 
@@ -18,20 +18,20 @@ export default function EventCard({card, containerStyle, onPress}) {
                     borderRadius: 15 
                 }}>
                 <View style={styles.textContainer}>
-                    <Text style={{color: '#fff', fontSize: 18, letterSpacing: 0.3, fontWeight: '700'}}>{card?.title}</Text>
-                    <Text style={{color: 'whitesmoke', fontSize: 12}}>{card?.time}</Text>
+                    <Text style={{color: '#fff', fontSize: 18, letterSpacing: 0.3, fontWeight: '700'}}>{card.title}</Text>
+                    <Text style={{color: 'whitesmoke', fontSize: 12}}>{card.time}</Text>
                 </View>
             </ImageBackground>
 
             {/* Bottom Container */}
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 15, marginTop: 15}}>
                 <View style={{flexDirection: 'row', marginLeft: 10}}>
-                    {/*card.eventUsers.map((join, index) => (
+                    {card.eventUsers.map((join, index) => (
                         <Image key={index} source={join} style={{marginLeft: -15, width: 35, height: 35, borderRadius: 50, borderWidth: 2, borderColor: 'whitesmoke'}} />
-                    ))*/}
+                    ))}
                     <Text style={{color: 'green', marginTop: 5, backgroundColor: 'lightgreen', opacity: 0.5, borderRadius: 15, paddingHorizontal: 10, paddingVertical: 4, height: 25}}>{card.joined}</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={{backgroundColor: '#ef018a', paddingHorizontal: 15, padding: 5, borderRadius: 50, flexDirection: 'row', alignItems: 'center'}}>
+                <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={{backgroundColor: '#f25fb9', paddingHorizontal: 15, padding: 5, borderRadius: 50, flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{color: '#fff'}}>Join Event</Text>
                     <Entypo name="chevron-right" size={18} color="#fff" />
                 </TouchableOpacity>

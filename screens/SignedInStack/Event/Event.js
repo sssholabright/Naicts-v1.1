@@ -1,4 +1,4 @@
-import { FlatList, Platform, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { events } from '../AllTempData'
@@ -25,6 +25,7 @@ export default function Event({navigation}) {
             setFilterData(events)
         }
         getEvents()
+        console.log(eventList)
     }, [user])
 
 
@@ -63,28 +64,29 @@ export default function Event({navigation}) {
     }
 
     return (
-        <ScrollView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor='whitesmoke' />
+        <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="light-content" backgroundColor='#f25fb9' />
             {/* Header Section (Back Icon and `Event`) */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+            <View style={{ backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
                     {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#000' /> 
+                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
                     ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#000' />
+                        <Ionicons name="chevron-back" size={24} color='#fff' />
                     )}
                 </TouchableOpacity> 
                 <View style={{}}>
-                    <Text style={{fontSize: 18, letterSpacing: 1, fontWeight: '700'}}>EVENT</Text>
+                    <Text style={{fontSize: 18, letterSpacing: 1, fontWeight: '700', color: '#fff'}}>EVENTS</Text>
                 </View> 
-                <TouchableOpacity activeOpacity={0.5} onPress={() => addEvent()}> 
+                {/*<TouchableOpacity activeOpacity={0.5} onPress={() => addEvent()}> 
                     <Entypo name="plus" size={34} color='#000' />
-                </TouchableOpacity>
+                </TouchableOpacity>*/}
                 <Text>{'        '}</Text>
             </View>
 
             {/* Search Section */}
-            <View style={{ marginVertical: 20, borderWidth: 1, borderColor: 'lightgray', borderRadius: 50, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15}}>
+            <ScrollView style={{}}>
+            <View style={{ margin: 20, borderWidth: 1, borderColor: 'lightgray', borderRadius: 50, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 15}}>
                 <Ionicons name="search" size={18} color="gray" />
                 <TextInput 
                     style={{padding: 5, marginLeft: 10}}
@@ -95,28 +97,29 @@ export default function Event({navigation}) {
             </View>
 
             {/* Events Container */}
-            <Text style={{fontSize: 18, fontWeight: '500', letterSpacing: 0.5}}>Upcoming Events</Text>
-            <FlatList 
-                horizontal 
-                showsHorizontalScrollIndicator={false}
-                data={eventList}
-                listKey={(item, index) => index.toString()} 
-                keyExtractor={item => `EventCard-${item.id}`} 
-                contentContainerStyle={{marginTop: 10, paddingBottom: 10}} 
-                renderItem={({item, index}) => (
-                    <EventCard 
-                        key={index}
-                        card={item}
-                        onPress={() => navigation.navigate('eventdetail', {detail: item})}
-                    />
-                )}
-            />
+            <View style={{marginHorizontal: 20}}>
+                <Text style={{fontSize: 18, fontWeight: '500', letterSpacing: 0.5}}>Upcoming Events</Text>
+                <FlatList 
+                    horizontal 
+                    showsHorizontalScrollIndicator={false}
+                    data={events} 
+                    listKey="EventCard"
+                    keyExtractor={item => `EventCard-${item.id}`} 
+                    contentContainerStyle={{marginTop: 10, paddingBottom: 10}} 
+                    renderItem={({item, index}) => (
+                        <EventCard 
+                            key={index}
+                            card={item}
+                            onPress={() => navigation.navigate('eventdetail', {detail: item})}
+                        />
+                    )}
+                />
 
             {/* Events Listing */}
             <Text style={{marginTop: 20, marginBottom: -20, fontSize: 18, fontWeight: '500', letterSpacing: 0.5}}>Popular Events</Text>
             <FlatList 
                 showsVerticalScrollIndicator={false}
-                data={eventList} 
+                data={events} 
                 listKey="EventList" 
                 keyExtractor={item => `EventList-${item.id}`} 
                 contentContainerStyle={{marginVertical: 20}} 
@@ -127,7 +130,9 @@ export default function Event({navigation}) {
                     />
                 )}
             />
-        </ScrollView>
+            </View>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -135,6 +140,6 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'whitesmoke',
         height: '100%',
-        padding: 20
+        //padding: 20
     }
 })

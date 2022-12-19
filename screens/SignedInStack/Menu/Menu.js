@@ -51,7 +51,7 @@ export default function Menu({navigation}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'whitesmoke',
+        backgroundColor: '#fff',
         height: '100%',
         padding: 10
     },    

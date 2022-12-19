@@ -1,9 +1,10 @@
-import { Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo, Ionicons } from '@expo/vector-icons'
 import { addDoc, collection, getDocs, orderBy, Timestamp } from 'firebase/firestore'
 import { db } from '../../SignedOutStack/authHooks/firebase'
 import useAuth from '../../SignedOutStack/authHooks/useAuth'
+import AwesomeLoading from 'react-native-awesome-loading'
 
 export default function DiscussionForum({navigation}) {
     const [search, setSearch] = useState("")
@@ -38,7 +39,6 @@ export default function DiscussionForum({navigation}) {
             setDiscussionList(discussions)
             setFilterData(discussions)
             setLoading(false)
-            console.log(discussions)
         }  
         getDiscussions()
     }, [user])
@@ -46,53 +46,62 @@ export default function DiscussionForum({navigation}) {
     
     return (
         <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+            <StatusBar barStyle="light-content" backgroundColor="#f25fb9" />
             {/* Header Container */}
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+            <View style={{ backgroundColor: '#f25fb9', padding: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
                     {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#000' /> 
+                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
                     ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#000' />
+                        <Ionicons name="chevron-back" size={24} color='#fff' />
                     )}
                 </TouchableOpacity>
                 <View style={{marginLeft: 20}}>
-                    <Text style={{fontWeight: '700', fontSize: 20}}>Discussion Forum</Text>
+                    <Text style={{fontWeight: '700', fontSize: 20, color: '#fff'}}>Discussion Forum</Text>
                 </View>
-                <TouchableOpacity activeOpacity={0.5} style={{backgroundColor: '#ef018a', padding: 5, paddingHorizontal: 10, borderRadius: 4}} onPress={() => navigation.navigate("creatediscussion")}>
-                    <Text style={{fontSize: 12, fontWeight: '500', color: '#fff'}}>CREATE</Text>
+                <TouchableOpacity activeOpacity={0.5} style={{backgroundColor: '#fff', padding: 5, paddingHorizontal: 10, borderRadius: 4}} onPress={() => navigation.navigate("creatediscussion")}>
+                    <Text style={{fontSize: 12, fontWeight: '500', color: '#ef018a'}}>CREATE</Text>
                 </TouchableOpacity>
             </View>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            
+            <ScrollView showsVerticalScrollIndicator={false} style={{padding: 20}}>
                 {/* Main Container */}
                 <View style={{marginTop: 20}}>
-                    <Text style={{textAlign: 'center', fontSize: 30, fontWeight: '700'}}>Learn Stock, {'\n'} Educate the World</Text>
-                    <View style={{marginVertical: 20, backgroundColor: 'whitesmoke', borderWidth: 1, borderColor: 'lightgray', borderRadius: 5, flexDirection: 'row', alignItems: 'center',  paddingHorizontal: 10}}>
-                            <Ionicons name="search" size={20} color="gray"/>
-                        <TextInput
-                            placeholder="Search Something..."
-                            style={{padding: 5, flex: 1, marginLeft: 10}}
-                            value={search}
-                            onChangeText={(text) => searchFilter(text)}
-                        />
-                    </View>
+                    <Text style={{textAlign: 'center', fontSize: 30, fontWeight: '700'}}>Let's Discuss</Text>
+                    <View style={{marginVertical: 20, backgroundColor: 'whitesmoke', borderWidth: 1, borderColor: 'lightgray', borderRadius: 20, flexDirection: 'row', alignItems: 'center',  paddingHorizontal: 10}}>
+                    <Ionicons name="search" size={20} color="gray"/>
+                    <TextInput
+                        placeholder="Search something..."
+                        style={{padding: 5, flex: 1, marginLeft: 10}}
+                        value={search}
+                        onChangeText={(text) => searchFilter(text)}
+                    />
+                </View>
 
                     {/* Disccussion List */}
                     {loading ? (
-                        <Text>Loading...</Text>
+                        <ActivityIndicator size={'large'} color="#f25fb9" />
                     ) : (
                         discussionsList.map((post, index) => (
-                            <View key={index} style={[{padding: 20, borderWidth: 1, borderColor: 'lightgray', borderRadius: 5, backgroundColor: 'whitesmoke', marginVertical: 20}, styles.shadow]}>
+                            <View key={index} style={[{padding: 20, borderWidth: 1, borderColor: 'lightgray', borderRadius: 5, backgroundColor: 'white', marginVertical: 20}, styles.shadow]}>
                                 <Text style={{fontSize: 18, fontWeight: '500', marginBottom: 10}}>{post.title}</Text>
-                                <Text style={{color: 'gray', fontSize: 12, }}>{post.topic}</Text>
+                                <Text style={{color: 'gray', fontSize: 12, }}>{post.description}</Text>
                                 <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 15}}>
-                                    <View style={{}}>
+                                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', width: 100}}>
+                                        <Image 
+                                            source={require('../../../assets/bili.jpg')}
+                                            style={{width: 30, height: 30, borderRadius: 5}}
+                                        />
                                         <Image 
                                             source={require('../../../assets/me.jpg')}
                                             style={{width: 30, height: 30, borderRadius: 5}}
                                         />
+                                        <Image 
+                                            source={require('../../../assets/ife.jpg')}
+                                            style={{width: 30, height: 30, borderRadius: 5}}
+                                        />
                                     </View>
-                                    <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => navigation.navigate('discussionpage', {post})}>
+                                    <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => navigation.navigate('discussionpage', { title: post.title, description: post.description, id: post.id })}>
                                         <Text style={{ color: '#ef018a'}}>Join Forum </Text>
                                         <Entypo name="triangle-right" size={15} color='#ef018a'/>
                                     </TouchableOpacity>
@@ -110,7 +119,7 @@ const styles = StyleSheet.create({
     container: {
         height: '100%',
         backgroundColor: '#fff',
-        padding: 20
+        //padding: 20
     },
 
     shadow: {  

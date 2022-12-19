@@ -53,7 +53,7 @@ export default function ProductInfo({route, navigation}) {
                             <View style={{ color: 'blue', backgroundColor: 'whitesmoke', alignItems: 'center', justifyContent: 'center', padding: 12, borderRadius: 100, marginRight: 10}}>
                                 <Entypo name="location-pin" size={18} color="#ef018a"/>
                             </View>
-                            <Text> Rustaveli Ave 57,{'\n'}17-001, Batume</Text>
+                            <Text>Malete {'\n'}Kwara State University</Text>
                         </View>
                         <Entypo name="chevron-right" size={22} color='#000' />
                     </View>

@@ -11,7 +11,7 @@ export default function MenuBox({ menu, onPress}) {
                     <Ionicons 
                         name={menu.icon} 
                         size={30} 
-                        color="#ef018a" 
+                        color="#f25fb9" 
                     />
                     <Text 
                         style={{

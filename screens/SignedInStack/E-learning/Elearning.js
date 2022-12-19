@@ -10,18 +10,18 @@ import CoursesCard from './components/CoursesCard'
 
 export default function Elearning({navigation}) {
     return (
-        <View style={{padding: 20, backgroundColor: '#fff', flex: 1}}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+        <View style={{backgroundColor: '#fff', flex: 1}}>
+            <StatusBar barStyle="light-content" backgroundColor='#f25fb9' />
+            <View style={{flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
                     {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#000' /> 
+                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
                     ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#000' />
+                        <Ionicons name="chevron-back" size={24} color='#fff' />
                     )}
                 </TouchableOpacity> 
                 <View style={{}}>
-                    <Text style={{fontSize: 18, letterSpacing: 0.1, fontWeight: '700'}}>E-LEARNING</Text>
+                    <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>E-LEARNING</Text>
                 </View>  
                 <Text>{'        '}</Text>
             </View>
