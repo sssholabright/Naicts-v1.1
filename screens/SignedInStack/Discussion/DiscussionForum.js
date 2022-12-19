@@ -1,10 +1,9 @@
 import { ActivityIndicator, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Entypo, Ionicons } from '@expo/vector-icons'
-import { addDoc, collection, getDocs, orderBy, Timestamp } from 'firebase/firestore'
+import { collection, getDocs } from 'firebase/firestore'
 import { db } from '../../SignedOutStack/authHooks/firebase'
 import useAuth from '../../SignedOutStack/authHooks/useAuth'
-import AwesomeLoading from 'react-native-awesome-loading'
 
 export default function DiscussionForum({navigation}) {
     const [search, setSearch] = useState("")

@@ -127,7 +127,7 @@ export const executives = [
     },
     {
         id: 6,
-        img: require('../../assets/cat.jpg'),
+        img: require('../../assets/ca.jpg'),
         name: "Aderayo Khairat",
         post: "Sport Director"
     }
