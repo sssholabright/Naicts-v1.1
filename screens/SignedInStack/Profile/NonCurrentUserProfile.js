@@ -1,15 +1,48 @@
 import { View, Text, SafeAreaView, StatusBar, ScrollView, Image, TouchableOpacity, Platform } from 'react-native'
 import React, { useEffect, useState } from 'react'
-//import { auth, db } from '../../SignedOutStack/authHooks/firebase'
-//import { collection, addDoc, getDoc, doc, getDocs, query, where } from 'firebase/firestore'
+import { auth, db } from '../../SignedOutStack/authHooks/firebase'
+import { collection, addDoc, getDoc, doc, getDocs, query, where, setDoc, onSnapshot } from 'firebase/firestore'
 
 import { Ionicons } from '@expo/vector-icons'
 
 export default function NonCurrentUserProfile({navigation, route}) {
-    const profileDetail = route.params.member
+    const [requests, setRequests] = useState([])
+
+    const { uid, firstName, lastName, email, matric, department, bio, portfolio, phone } = route.params
+
+    const sendChatRequest = () => {
+        const chatRequest = {
+            id: auth.currentUser.uid + uid,
+            senderId: auth.currentUser.uid,
+            receiverId: uid,
+            senderName: auth.currentUser.displayName,
+            senderEmail: auth.currentUser.email,
+            senderImage: '',
+            status: 'pending'
+        }
+        setDoc(doc(db, "chatRequests", auth.currentUser.uid + uid), chatRequest)
+    }
+
+    useEffect(() => {
+        const q = query(collection(db, "chatRequests"), where("sender", "==", auth.currentUser.uid)) // get all the requests that the user has sent to the other user 
+        const getRequests = async () => {
+            try {
+                const querySnapshot = await getDocs(q)
+                const requests = []
+                querySnapshot.forEach((doc) => {
+                    requests.push(doc.data())
+                })
+                setRequests(requests)
+            } catch (error) {
+                alert(error)
+            }
+        }
+        getRequests()
+    }, [])
+
 
     return (
-        <SafeAreaView style={{height: '100%', backgroundColor: '#fff'}}>
+        <SafeAreaView style={{height: '100%', backgroundColor: '#fff'}} key={uid}>
             <StatusBar barStyle="light-content" backgroundColor='#f25fb9' />
             {/* Header Section (Back Icon and `Event`) */}
             <View style={{ backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
@@ -21,7 +54,7 @@ export default function NonCurrentUserProfile({navigation, route}) {
                     )}
                 </TouchableOpacity> 
                 <View style={{}}>
-                    <Text style={{fontSize: 16, letterSpacing: 0.1, fontWeight: '700', color: '#fff'}}>{profileDetail.firstName} {profileDetail.lastName}</Text>
+                    <Text style={{fontSize: 16, letterSpacing: 0.1, fontWeight: '700', color: '#fff'}}>{uid} {lastName}</Text>
                 </View> 
                 <Text>{'        '}</Text>
             </View>
@@ -33,8 +66,8 @@ export default function NonCurrentUserProfile({navigation, route}) {
                             <Image source={require('../../../assets/me.jpg')} style={{width: 70, height: 70, borderRadius: 50}} />
                         </TouchableOpacity>
                         <View style={{marginHorizontal: 10}}>
-                            <Text style={{color: '#fff', fontWeight: '700', fontSize: 18}}>{profileDetail.firstName} {profileDetail.lastName}</Text>
-                            <Text style={{color: 'gray', fontWeight: '500', fontSize: 13}}>{profileDetail.department}</Text>
+                            <Text style={{color: '#fff', fontWeight: '700', fontSize: 18}}>{firstName} {lastName}</Text>
+                            <Text style={{color: 'gray', fontWeight: '500', fontSize: 13}}>{department}</Text>
                         </View>
                     </View>
 
@@ -51,21 +84,49 @@ export default function NonCurrentUserProfile({navigation, route}) {
                         </View>
 
                         {/* Message Button SECTION */}
-                            <View style={{marginVertical: 10}}>
-                                <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}}>
-                                    <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
-                                </TouchableOpacity>
-                            </View>
+                        {/*{requests.map((request) => {
+                            if (request.status === 'pending') {
+                                <View style={{marginVertical: 10}}>
+                                    <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}} onPress={sendChatRequest}>
+                                        <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            } else if (request.status === 'accepted') {
+                                <View style={{marginVertical: 10}}>
+                                    <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}} onPress={() => navigation.navigate('Chat', {uid: uid, firstName: firstName, lastName: lastName})}>
+                                        <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            } else if (request.status === 'declined') {
+                                <View style={{marginVertical: 10}}>
+                                    <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}} onPress={sendChatRequest}>
+                                        <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            } else {
+                                <View style={{marginVertical: 10}}>
+                                    <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}} onPress={sendChatRequest}>
+                                        <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            }
+                        })}*/}
+                        
+                        <View style={{marginVertical: 10}}>
+                                    <TouchableOpacity activeOpacity={0.9} style={{backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'center', borderRadius: 5}} onPress={sendChatRequest}>
+                                        <Text style={{color: '#f25fb9', fontSize: 14, fontWeight: '500'}}>MESSAGE</Text>
+                                    </TouchableOpacity>
+                                </View>
 
                         {/* Educational Details SECTION */}
                         <View style={{ marginVertical: 10, borderColor: 'gray', borderRadius: 5, borderWidth: 1, padding: 10}}>
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                                 <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Matric No:</Text>
-                                <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>{profileDetail.matric}</Text>
+                                <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>{matric}</Text>
                             </View>  
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                                 <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Department:</Text>
-                                <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>{profileDetail.department}</Text>
+                                <Text style={{textTransform: 'uppercase', color: '#fff', fontSize: 12, fontWeight: '500'}}>{department}</Text>
                             </View> 
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                                 <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Level:</Text>
@@ -75,10 +136,10 @@ export default function NonCurrentUserProfile({navigation, route}) {
                     </View>          
 
                     {/* Biography SECTION */}
-                    {!profileDetail.bio ? <View /> :
+                    {!bio ? <View /> :
                         <View style={{marginVertical: 10, borderColor: 'lightgray', borderWidth: 1, borderRadius: 10, padding: 20}}>
                             <Text style={{fontSize: 15, fontWeight: '500'}}>Bio:</Text>
-                            <Text style={{color: 'gray', fontSize: 12, fontWeight: '500', marginTop: 5}}>{profileDetail.bio/*I was born in NY but raised in Argentina and Miami. For work.*/}</Text>
+                            <Text style={{color: 'gray', fontSize: 12, fontWeight: '500', marginTop: 5}}>{bio/*I was born in NY but raised in Argentina and Miami. For work.*/}</Text>
                         </View>  
                     }
 
@@ -88,7 +149,7 @@ export default function NonCurrentUserProfile({navigation, route}) {
 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                             <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Name:</Text>
-                            <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.firstName} {profileDetail.lastName}</Text>
+                            <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{firstName} {lastName}</Text>
                         </View>
 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
@@ -98,20 +159,20 @@ export default function NonCurrentUserProfile({navigation, route}) {
 
                         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                             <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Email address:</Text>
-                            <Text style={{textTransform: 'lowercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.email}</Text>
+                            <Text style={{textTransform: 'lowercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{email}</Text>
                         </View>  
 
-                        {!profileDetail.phone ? null :
+                        {!phone ? null :
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                                 <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Phone Number:</Text>
-                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.phone}</Text>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{phone}</Text>
                             </View>  
                         }
 
-                        {!profileDetail.portfolio ? null :
+                        {!portfolio ? null :
                             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5}}>
                                 <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>Portfolio:</Text>
-                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{profileDetail.portfolio}</Text>
+                                <Text style={{textTransform: 'uppercase', color: 'gray', fontSize: 12, fontWeight: '500'}}>{portfolio}</Text>
                             </View>  
                         }
                     </View>
@@ -129,7 +190,7 @@ export default function NonCurrentUserProfile({navigation, route}) {
                         </View>
                     </View>
                     <View style={{height: 1, backgroundColor: 'whitesmoke'}} />
-                    {profileDetail.department === "Computer Science" ? (
+                    {department === "Computer Science" ? (
                         <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
                             <View>
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
@@ -139,7 +200,7 @@ export default function NonCurrentUserProfile({navigation, route}) {
                                 <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, marginTop: 2}}>National Association of Computing Students</Text>
                             </View>
                         </View>
-                    ) : profileDetail.department === "Library and Information Science" ? (
+                    ) : department === "Library and Information Science" ? (
                         <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
                             <View>
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />
@@ -149,7 +210,7 @@ export default function NonCurrentUserProfile({navigation, route}) {
                                 <Text style={{color: "gray", marginLeft: 10, fontWeight: '500', fontSize: 8, marginTop: 2}}>National Association of Computing Students</Text>
                             </View>
                         </View>
-                    ) : profileDetail.department === "Mass Communication" ? (
+                    ) : department === "Mass Communication" ? (
                         <View style={{marginVertical: 10, flexDirection: 'row', alignItems: 'center'}}>
                             <View>
                                 <Image style={{width: 50, height: 50, borderRadius: 50}} source={require('../../../assets/csc.jpg')}  />

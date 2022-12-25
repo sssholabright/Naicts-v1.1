@@ -2,7 +2,7 @@ import { Animated,  View } from 'react-native';
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { Feather, FontAwesome5, Octicons } from '@expo/vector-icons'
+import { Feather, FontAwesome5, Ionicons, Octicons } from '@expo/vector-icons'
 import Elearning from './SignedInStack/E-learning/Elearning';
 import Home from './SignedInStack/Home/Home';
 import Profile from './SignedInStack/Profile/Profile';
@@ -37,6 +37,10 @@ import NonCurrentUserProfile from './SignedInStack/Profile/NonCurrentUserProfile
 import ChatPage from './SignedInStack/Chat/ChatPage';
 import MessageScreen from './SignedInStack/Chat/MessageScreen';
 import AddProfile from './SignedInStack/Profile/AddProfile';
+import ImageList from './SignedInStack/Gallery/ImageList';
+import Notifications from './SignedInStack/Notifications/Notifications';
+import PostProduct from './SignedInStack/MarketPlace/PostProduct'
+import AssociationPay from './SignedInStack/Payment/AssociationPay'
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,6 +61,12 @@ export default function SignedInStack() {
                         } else if (route.name === 'Menu') {
                             iconName = focused ? 'apps' : 'apps';
                             return <Octicons name={iconName} size={size} color={color} />
+                        } else if (route.name === 'Chat') {
+                            iconName = focused ? 'chatbubbles-outline' : 'chatbubbles-outline';
+                            return <Ionicons name={iconName} size={size} color={color} />
+                        } else if (route.name === 'Notifications') {
+                            iconName = focused ? 'bell' : 'bell';
+                            return <Feather name={iconName} size={size} color={color} />
                         }
                     },
                 })}
@@ -80,14 +90,16 @@ export default function SignedInStack() {
                 }}
                 initialRouteName="Home">
                 <Tab.Screen name="Home" component={Home} options={{headerShown: false}} />
+                <Tab.Screen name="Chat" component={ChatPage} options={{headerShown: false}} />
                 <Tab.Screen name="Menu" component={Menu} options={{headerShown: false}} />
+                <Tab.Screen name="Notifications" component={Notifications} options={{headerShown: false}} />
                 <Tab.Screen name="Profile" component={Profile} options={{headerShown: false}} />
             </Tab.Navigator>
         )
     }
 
     return (
-        <Stack.Navigator initialRouteName="">
+        <Stack.Navigator initialRouteName="discussionforum">
             <Stack.Group>
                 <Stack.Screen name="stacktab" component={StackTab} options={{headerShown: false}}/>
                 <Stack.Screen name="nonuserprofile" component={NonCurrentUserProfile} options={{headerShown: false}} />
@@ -109,9 +121,10 @@ export default function SignedInStack() {
             <Stack.Group screenOptions={{ presentation: "modal" }} >  
                 <Stack.Screen name="fileslist" component={FilesList} options={{headerShown: false}} />
                 <Stack.Screen name="addprofile" component={AddProfile} options={{headerShown: false}} />
+                <Stack.Screen name="associationpay" component={AssociationPay} options={{headerShown: false}} />
                 <Stack.Screen name="searchcourse" component={CourseSearch} options={{headerShown: false}} />
                 <Stack.Screen name="showimage" component={ShowImage} options={{headerShown: false}} />
-                <Stack.Screen name="discussionpage" component={DiscussionPage} options={{headerShown: false}} />
+                <Stack.Screen name="discussionpage" component={DiscussionPage} options={{headerShown: true}} />
                 <Stack.Screen name="eventdetail" component={EventDetail} options={{headerShown: false}} />
                 <Stack.Screen name="participant" component={Participant} options={{headerShown: false}} />
                 <Stack.Screen name="productinfo" component={ProductInfo} options={{headerShown: false}} />
@@ -121,10 +134,12 @@ export default function SignedInStack() {
                 <Stack.Screen name="creatediscussion" component={CreateDiscussion} options={{headerShown: false}} />
                 <Stack.Screen name="admin" component={Admin} options={{headerShown: false}} />
                 <Stack.Screen name="readmore" component={ReadMore} options={{headerShown: false}} />
+                <Stack.Screen name="imagelist" component={ImageList} options={{headerShown: false}} />
                 <Stack.Screen name="postitem" component={PostItem} options={{headerShown: false}} />
                 <Stack.Screen name="editprofile" component={EditProfile} options={{headerShown: false}} />
                 <Stack.Screen name="settings" component={Settings} options={{headerShown: false}} />
                 <Stack.Screen name="messagescreen" component={MessageScreen} options={{headerShown: false}} />
+                <Stack.Screen name="postproduct" component={PostProduct} options={{headerShown: false}} />
             </Stack.Group>
         </Stack.Navigator>
     )

@@ -47,7 +47,7 @@ export default function EventDetail({route, navigation}) {
                             <Text style={{fontWeight: '300', color: 'gray'}}>Organized by {detail.organizer}</Text>
                             <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 3}}>
                                 <Ionicons name="location-outline" size={18} color="#ef018a" />
-                                <Text style={{color: 'gray'}}> {detail.venue}   •   </Text>
+                                <Text style={{color: 'gray'}}> {detail.location}   •   </Text>
                                 <Ionicons name="time-outline" size={18} color="#ef018a" />
                                 <Text style={{color: 'gray'}}> {detail.time}</Text>
                             </View>

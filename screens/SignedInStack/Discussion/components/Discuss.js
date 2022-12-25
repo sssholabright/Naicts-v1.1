@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import { Image, Text, View } from 'react-native'
 import React from 'react'
 
 export default function Discuss({discuss}) {
@@ -12,5 +12,3 @@ export default function Discuss({discuss}) {
         </View>
     )
 }
-
-const styles = StyleSheet.create({})

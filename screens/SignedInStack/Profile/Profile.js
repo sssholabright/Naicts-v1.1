@@ -52,7 +52,7 @@ export default function Profile({navigation}) {
                                 <Text style={{color: 'gray', fontSize: 15, fontWeight: '500'}}>Level</Text>
                                 <Text style={{color: '#fff', fontSize: 15, fontWeight: '500'}}>400</Text>
                             </View>       
-                            <View style={{height: 50, width: 1, backgroundColor: 'gray', }} />
+                            <View style={{height: 50, width: 1, marginLeft: 20, backgroundColor: 'gray', }} />
                                 <View>
                                     <Text style={{color: 'gray', fontSize: 15, fontWeight: '500'}}>Date Joined</Text>
                                     <Text style={{color: '#fff', fontSize: 15, fontWeight: '500'}}>{moment(profileDetail.createdAt).format('DD MMM YYYY')}</Text>

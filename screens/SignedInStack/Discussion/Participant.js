@@ -1,8 +1,37 @@
 import { Image, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import Icon from '@expo/vector-icons/Entypo'
+import { auth, db } from '../../SignedOutStack/authHooks/firebase'
+import { getDocs, query, where, collection, doc, updateDoc } from 'firebase/firestore'
 
-export default function Participant({navigation}) {
+export default function Participant({navigation, route}) {
+    const [loading, setLoading] = useState(false);
+    const { title, uid, joinDiscussion } = route.params;
+
+    const addParticipant = () => {
+        joinDiscussion 
+        navigation.replace('discussionpage', {title, uid}) // we navigate to the discussion page
+    }
+
+    const showJoinedParticipants = () => {
+        const q = query(collection(db, 'discussions', uid, 'participants'), where('joined', '==', true));
+        const getParticipants = async () => {
+            try {
+                const querySnapshot = await getDocs(q);
+                const participants = [];
+                querySnapshot.forEach((doc) => {
+                    participants.push(doc.data());
+                })
+                console.log(participants);
+            } catch (error) {
+                alert(error);
+            }
+        }
+        getParticipants();
+    }
+           
+
+
     return (
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#fff"/>
@@ -43,7 +72,7 @@ export default function Participant({navigation}) {
                 </View>
             </View>
             <View>
-                <TouchableOpacity activeOpacity={0.9} style={styles.joinButton} onPress={() => navigation.navigate('discussionpage')}>
+                <TouchableOpacity activeOpacity={0.9} style={styles.joinButton} onPress={joinDiscussion}>
                     <Text style={{color: '#fff', fontWeight: '700', fontSize: 16}}>Join Discussion</Text>
                 </TouchableOpacity>
             </View>

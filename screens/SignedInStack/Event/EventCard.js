@@ -26,10 +26,10 @@ export default function EventCard({card, containerStyle, onPress}) {
             {/* Bottom Container */}
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginHorizontal: 15, marginTop: 15}}>
                 <View style={{flexDirection: 'row', marginLeft: 10}}>
-                    {card.eventUsers.map((join, index) => (
+                    {/*card.eventUsers.map((join, index) => (
                         <Image key={index} source={join} style={{marginLeft: -15, width: 35, height: 35, borderRadius: 50, borderWidth: 2, borderColor: 'whitesmoke'}} />
-                    ))}
-                    <Text style={{color: 'green', marginTop: 5, backgroundColor: 'lightgreen', opacity: 0.5, borderRadius: 15, paddingHorizontal: 10, paddingVertical: 4, height: 25}}>{card.joined}</Text>
+                    ))*/}
+                    <Text style={{color: 'green', marginTop: 5, backgroundColor: 'lightgreen', opacity: 0.5, borderRadius: 15, paddingHorizontal: 10, paddingVertical: 4, height: 25}}>{card.attendees} attending</Text>
                 </View>
                 <TouchableOpacity activeOpacity={0.5} onPress={onPress} style={{backgroundColor: '#f25fb9', paddingHorizontal: 15, padding: 5, borderRadius: 50, flexDirection: 'row', alignItems: 'center'}}>
                     <Text style={{color: '#fff'}}>Join Event</Text>

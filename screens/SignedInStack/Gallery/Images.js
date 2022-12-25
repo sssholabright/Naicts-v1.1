@@ -1,6 +1,6 @@
-export const Images = [
+export const images = [
     {
-        url: require('../../../assets/me.jpg'),
+        url: require('../../../assets/ife.jpg'),
     },
     {
         url: require('../../../assets/ife.jpg'),

@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 export default function ReadMore({navigation, route}) {
     const {title, content} = route.params
     return (
-        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+        <SafeAreaView style={{height: '100%', backgroundColor: '#fff'}}>
             <StatusBar barStyle="light-content" backgroundColor="#f25fb9" />
             {/* Header Section (Back Icon and `Event`) */}
             <View style={{flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
@@ -21,8 +21,8 @@ export default function ReadMore({navigation, route}) {
                 </View>  
                 <Text>{'        '}</Text>
             </View>
-            <ScrollView style={{flex: 1, backgroundColor: '#fff', paddingHorizontal: 20, paddingVertical: 20}}>
-                <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#000', fontWeight: '700', textTransform: 'uppercase'}}>{title}</Text>
+            <ScrollView style={{ paddingHorizontal: 20, paddingVertical: 20}}>
+                <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#000', fontWeight: '700', color: '#000', textTransform: 'uppercase'}}>{title}</Text>
                 <Text style={{fontSize: 14, letterSpacing: 0.1, color: '#000', fontWeight: '400', marginTop: 10}}>{content}</Text>
             </ScrollView>
         </SafeAreaView>

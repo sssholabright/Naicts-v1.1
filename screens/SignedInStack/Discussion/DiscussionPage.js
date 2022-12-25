@@ -1,16 +1,41 @@
 import { Image, SafeAreaView, StatusBar, Text, TouchableOpacity, View } from 'react-native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import Icon from '@expo/vector-icons/Ionicons'
 import { Bubble, GiftedChat, Send } from 'react-native-gifted-chat'
 import { auth, db } from '../../SignedOutStack/authHooks/firebase'
-import { addDoc, collection, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 
 
 export default function DiscussionPage({navigation, route}) {
     const [messages, setMessages] = useState([]);
 
+    const leaveDiscussion = () => {
+        const user = auth.currentUser; // get the current user
+        const q = query(collection(db, 'discussions', route.params.id, 'members'), where('uid', '==', user.uid)); // query the members collection for the current user 
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            snapshot.docs.map(docSnapshot => {
+                if (docSnapshot.data().uid === user.uid) {
+                    deleteDoc(doc(db, 'discussions', route.params.id, 'members', docSnapshot.id)); // delete the current user from the members collection
+                }
+            })
+        });
+        return unsubscribe;
+    }
+
+
+                    
+                    
+    
+
+    const leave = () => { // function to leave the discussion
+        leaveDiscussion();
+        navigation.goBack();
+    }
+
     const { title, id } = route.params;
+
+    
     
     useEffect(() => {
         const q = query(collection(db, 'discussions', id, 'chats'), orderBy('createdAt', 'desc'));
@@ -18,14 +43,84 @@ export default function DiscussionPage({navigation, route}) {
             snapshot.docs.map(doc => ({
                 _id: doc.data()._id,
                 createdAt: doc.data().createdAt.toDate(),
-                text: doc.data().text,
+                text: doc.data().text, 
                 user: doc.data().user,
+                read: doc.data().read
             }))
         ));
         return unsubscribe;
     }, []);
 
+    const newMessages = messages.map(message => {
+        return {
+            _id: message._id,
+            createdAt: message.createdAt,
+            text: message.text,
+            user: {
+                _id: message.user._id,
+                name: message.user.name,
+                avatar: message.user.avatar
+            },
+            read: message.read
+        }
+    })
 
+    const unreadMessages = newMessages.filter(message => message.read === false);
+
+    const user = auth.currentUser;
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerStyle: {backgroundColor: '#f25fb9'},
+            headerRight: () => (
+                <View style={{flexDirection: 'row', justifyContent: 'space-between', width: 80, marginRight: 10}}>
+                    <TouchableOpacity onPress={() => navigation.navigate('DiscussionMembers', {id: id})}>
+                        <FontAwesome name="users" size={24} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => leave()}>
+                        <Icon name="settings-outline" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>
+            ),
+            headerTitle: () => (
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Text style={{color: '#fff', fontSize: 20, fontWeight: 'bold'}}>{title}</Text>
+                    {unreadMessages.length > 0 ? (
+                        <View style={{backgroundColor: 'red', borderRadius: 10, width: 20, height: 20, justifyContent: 'center', alignItems: 'center', marginLeft: 5}}>
+                            <Text style={{color: 'white', fontSize: 12}}>{unreadMessages.length}</Text>
+                        </View>
+                    ) : null}
+                </View>
+            ),
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Icon name="chevron-back-outline" size={24} color="white" />
+                </TouchableOpacity>
+            )
+        })
+    }, [navigation, title, unreadMessages.length]);
+
+
+    
+    /*
+
+    useEffect(() => {
+        const q = query(collection(db, 'chatRequests', id, 'messages'), orderBy('createdAt', 'desc'));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            snapshot.docs.map(docSnapshot => {
+                if (docSnapshot.data().user._id !== user.uid) {
+                    setDoc(doc(db, 'chatRequests', id, 'messages', docSnapshot.id), {
+                        read: true
+                    }, {merge: true})
+                }
+            })
+        });
+        return unsubscribe;
+    }, []);
+ 
+ 
+    */
+   
     const onSend = useCallback((messages = []) => {
         setMessages((previousMessages) =>
             GiftedChat.append(previousMessages, messages),
@@ -36,7 +131,8 @@ export default function DiscussionPage({navigation, route}) {
             _id, 
             createdAt,
             text, 
-            user 
+            user,
+            read: false 
         });
     }, []);
 
@@ -80,34 +176,18 @@ export default function DiscussionPage({navigation, route}) {
     }
             
     return (
-        <SafeAreaView style={{height: '100%'}}>
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-            <View style={{backgroundColor: '#fff', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, minHeight: '16%',}}>
-                <TouchableOpacity activeOpacity={0.9} onPress={() => navigation.navigate('discussionforum')}>
-                    <Icon name="chevron-back" size={24} />
-                </TouchableOpacity>
-                <View style={{alignItems: 'center'}}>
-                    <Image source={require('../../../assets/me.jpg')} style={{width: 50, height: 50, borderRadius: 50}} /> 
-                    <Text style={{fontWeight: '700', fontSize: 20}}>{title}</Text>
-                    <Text style={{fontSize: 14, color: 'gray'}}>85 members</Text>
-                </View>
-                <TouchableOpacity activeOpacity={0.9}>
-                    <Icon name="md-notifications-outline" size={24} />
-                </TouchableOpacity>
-            </View>
-
+        <SafeAreaView style={{flex: 1, backgroundColor: 'white'}}>
+            <StatusBar barStyle="dark-content" />
             <GiftedChat
-                messages={messages}
-                onSend={(messages) => onSend(messages)}
+                messages={newMessages}
+                onSend={messages => onSend(messages)}
                 user={{
-                    _id: auth.currentUser.uid,
-                    name: auth.currentUser.email,
+                    _id: user.uid,
+                    name: user.displayName,
+                    avatar: user.photoURL
                 }}
-                textInputStyle={{backgroundColor: '#fff', borderRadius: 20, borderWidth: 1, borderColor: '#ccc', height: 50, paddingHorizontal: 10, paddingVertical: 5, fontSize: 15, color: '#000'}}
-                renderBubble={renderBubble}
-                alwaysShowSend
                 renderSend={renderSend}
-                renderUsernameOnMessage={true}
+                renderBubble={renderBubble}
                 scrollToBottom
                 scrollToBottomComponent={scrollToBottomComponent}
             />

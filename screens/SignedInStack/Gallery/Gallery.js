@@ -1,38 +1,116 @@
-import { Dimensions, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { Images } from './Images'
+import React, { useState } from 'react';
+import { View, Text, SafeAreaView, StatusBar, TouchableOpacity, Image, ScrollView, Dimensions, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { images } from './Images';
+
+const { width, height } = Dimensions.get('window');
 
 
-export default function Gallery({navigation}) {
+export function HeaderTabs({ activeTab, setActiveTab }) {
     return (
-        <SafeAreaView style={{backgroundColor: '#fff', flex: 1}}>
-            <StatusBar barStyle="light-content" backgroundColor='#f25fb9' />
-            <View style={{flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
-                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
-                    {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
-                    ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#fff' />
-                    )}
-                </TouchableOpacity> 
-                <View style={{}}>
-                    <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>GALLERY</Text>
-                </View>  
-                <Text>{'        '}</Text>
+        <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+            <HeaderButton
+                text="Photos"
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+            />
+            <HeaderButton
+                text="Folders"
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+            />
+        </View>
+    )
+}
+
+export function HeaderButton({ text, activeTab, setActiveTab }) {
+    return (
+        <TouchableOpacity
+            onPress={() => setActiveTab(text)}
+            style={{
+                backgroundColor: 'transparent',
+                paddingVertical: 6,
+                paddingHorizontal: 16,
+                borderRadius: 30,
+            }}
+        >
+            <Text style={{color: activeTab === text ? '#f25fb9' : 'gray', fontSize: 15, fontWeight: '700'}}>
+                {text}
+            </Text>
+        </TouchableOpacity>
+    )
+}
+
+export function GalleryPhotos({onPress, images}) {
+    return (
+        <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                    {images.map((image, index) => (
+                        <TouchableOpacity key={index} style={{marginBottom: 2}} activeOpacity={0.7} onPress={onPress}>
+                            <Image
+                                key={index}
+                                source={image.url}
+                                style={{
+                                    width: width / 3,
+                                    height: width / 3,
+                                }}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+            </ScrollView>
+        </View>
+    )
+}
+
+export function GalleryFolders({onPress, images}) {
+    return (
+        <View style={{flex: 1, marginTop: 10, backgroundColor: '#fff'}}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={{flexDirection: 'row',  paddingHorizontal: 10, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-around'}}>
+                    {images.map((image, index) => (
+                        <View key={index} style={{marginBottom: 15}}>
+                            <TouchableOpacity key={index} style={{marginBottom: 2}} activeOpacity={0.7} onPress={onPress}>
+                                <Image
+                                    key={index}
+                                    source={image.url}
+                                    style={{
+                                        width: width / 2.5,
+                                        height: width / 2.5,
+                                        borderRadius: 15
+                                    }}
+                                />
+                            </TouchableOpacity>
+                            <Text style={{textAlign: 'center', fontWeight: '700', fontSize: 15, width: 150, textAlign: 'center'}}>Naicts Football 2023 with the vice chancellor {index + 1}</Text>
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
+        </View>
+    )
+}
+
+export default function Gallery({ navigation }) {
+    const [activeTab, setActiveTab] = useState('Photos');
+    return (
+        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+            <StatusBar barStyle="light-content" backgroundColor="#f25fb9" />
+            <View style={{flexDirection: 'row-reverse', justifyContent: 'flex-end', marginBottom: 10, paddingHorizontal: 20, paddingTop: 15, paddingBottom: 0, alignItems: 'center'}}>
+                <Text style={{fontSize: 20, fontWeight: '700', marginLeft: 30, }}>Gallery</Text>
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name="chevron-back" size={30} color="#f25fb9" />
+                </TouchableOpacity>
             </View>
-            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff'}}>
-                <Text style={{fontWeight: '700', fontSize: 30, textAlign: 'center', paddingHorizontal: 10, color: 'lightgray', letterSpacing: 0.2}}>Gallery is not available for now, Come Back Later</Text>
+            <HeaderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <View style={{flex: 1}}>
+                {activeTab === 'Photos' ? (
+                    <GalleryPhotos images={images} onPress={() => navigation.navigate('showimage', {images: images})} />
+                ) : (
+                    <GalleryFolders images={images} onPress={() => navigation.navigate('imagelist', {images: images})} />
+                )}
             </View>
-            {/*<View style={{flexDirection: 'row', flexWrap: 'wrap', marginTop: 5}}>
-                {Images.map((image, index) => (
-                    <TouchableOpacity key={index}  onPress={() => navigation.navigate('showimage', {url: image.url})} activeOpacity={0.5}>
-                        <Image source={image.url} style={{width: 120, height: 120}} />
-                    </TouchableOpacity>
-                ))}
-            </View>*/}
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({})

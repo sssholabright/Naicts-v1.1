@@ -2,9 +2,9 @@ import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from
 import React from 'react'
 import { Entypo } from '@expo/vector-icons'
 
-export default function EventList({list}) {
+export default function EventList({list, onPress}) {
     return (
-        <TouchableOpacity activeOpacity={0.5} style={[{flexDirection: 'row', backgroundColor: '#fff', marginVertical: 10, marginHorizontal: 5, borderRadius: 15}, styles.shadow]}>
+        <TouchableOpacity onPress={onPress} activeOpacity={0.5} style={[{flexDirection: 'row', backgroundColor: '#fff', marginVertical: 10, marginHorizontal: 5, borderWidth: 1, borderColor: 'lightgray', borderRadius: 15}, styles.shadow]}>
             <ImageBackground 
                 resizeMode="cover" 
                 source={list?.img} 
@@ -32,7 +32,7 @@ export default function EventList({list}) {
 }
 
 const styles = StyleSheet.create({
-    shadow: {
+    shadofw: {
         shadowColor: '#000',
         shadowOffset: {width: 0, height: 1},
         shadowOpacity: .3,

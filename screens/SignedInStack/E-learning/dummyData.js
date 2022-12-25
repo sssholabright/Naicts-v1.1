@@ -19,16 +19,6 @@ export const categories = [
         title: "Illustrations",
         thumbnail: require("../../../assets/csc.jpg")
     },
-    {
-        id: 4,
-        title: "Drawing",
-        //thumbnail: require("../../../assets/Disscussion.png")
-    },
-    {
-        id: 5,
-        title: "Animation",
-        thumbnail: require("../../../assets/f.png")
-    }
 ]
 
 export const courses_list_1 = [

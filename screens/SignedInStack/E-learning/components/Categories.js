@@ -4,7 +4,7 @@ import { Entypo } from '@expo/vector-icons'
 
 export default function Categories({containerStyle, category}) {
     return (
-        <TouchableOpacity activeOpacity={0.5}>
+        <TouchableOpacity activeOpacity={0.5} style={{width: 200, marginRight: 20}}>	
             <ImageBackground 
                 resizeMode="cover" 
                 source={category?.thumbnail} 

@@ -20,10 +20,6 @@ import expo.modules.ReactNativeHostWrapper;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import com.vinzscam.reactnativefileviewer.RNFileViewerPackage;
-import com.reactlibrary.PDFViewPackage;
-import com.dylanvann.fastimage.FastImageViewPackage;
-
 public class MainApplication extends Application implements ReactApplication {
   private final ReactNativeHost mReactNativeHost = new ReactNativeHostWrapper(
     this,
@@ -37,8 +33,6 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       @SuppressWarnings("UnnecessaryLocalVariable")
       List<ReactPackage> packages = new PackageList(this).getPackages();
-      new PDFViewPackage();
-      //new RNFileViewerPackage()
       // Packages that cannot be autolinked yet can be added manually here, for example:
       // packages.add(new MyReactNativePackage());
       return packages;

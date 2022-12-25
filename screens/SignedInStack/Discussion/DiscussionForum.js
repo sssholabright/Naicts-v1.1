@@ -1,131 +1,303 @@
-import { ActivityIndicator, Image, Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, FlatList, Platform, SafeAreaView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { Entypo, Ionicons } from '@expo/vector-icons'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '../../SignedOutStack/authHooks/firebase'
-import useAuth from '../../SignedOutStack/authHooks/useAuth'
+import { Ionicons } from '@expo/vector-icons'
+import { collection, getDocs, setDoc, doc, orderBy, query, where, onSnapshot } from 'firebase/firestore'
+import { auth, db } from '../../SignedOutStack/authHooks/firebase'
+import Discussion from './components/Discussion'
 
-export default function DiscussionForum({navigation}) {
-    const [search, setSearch] = useState("")
-    const [filterData, setFilterData] = useState([])
-    const [discussionsList, setDiscussionList] = useState([])
-    const [loading, setLoading] = useState(false)
 
-    const { user } = useAuth()
+export default function DiscussionForum({ navigation }) {
+    const [activeTab, setActiveTab] = useState('New Discussions');
 
-    const searchFilter = (text) => {
-        if (text) {
-            const newData = filterData.filter((item) => {
-                const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase();
-                const textData = text.toUpperCase()
-                return itemData.indexOf(textData) >- 1;
-            });
-            setDiscussionList(newData)
-            setSearch(text)
-        }
-        else {
-            setFilterData(discussionsList)
-            setSearch(text)
-        }
-    }
-
-    useEffect(() => {
-        const getDiscussions = async () => {
-            setLoading(true)
-            const discussionsCollection = collection(db, "discussions")
-            const discussionsSnapshot = await getDocs(discussionsCollection)
-            const discussions = discussionsSnapshot.docs.map(doc => doc.data())
-            setDiscussionList(discussions)
-            setFilterData(discussions)
-            setLoading(false)
-        }  
-        getDiscussions()
-    }, [user])
-
-    
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
             <StatusBar barStyle="light-content" backgroundColor="#f25fb9" />
-            {/* Header Container */}
-            <View style={{ backgroundColor: '#f25fb9', padding: 20, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+            <View style={{ flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10 }}>
                 <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
                     {Platform.OS === "android" ? (
                         <Ionicons name="arrow-back" size={24} color='#fff' /> 
                     ): Platform.OS === "ios" (
                         <Ionicons name="chevron-back" size={24} color='#fff' />
                     )}
-                </TouchableOpacity>
-                <View style={{marginLeft: 20}}>
-                    <Text style={{fontWeight: '700', fontSize: 20, color: '#fff'}}>Discussion Forum</Text>
-                </View>
+                </TouchableOpacity> 
+                <Text style={{ color: 'white', fontSize: 20, fontWeight: 'bold', marginLeft: 20 }}>Discussion Forum</Text>
                 <TouchableOpacity activeOpacity={0.5} style={{backgroundColor: '#fff', padding: 5, paddingHorizontal: 10, borderRadius: 4}} onPress={() => navigation.navigate("creatediscussion")}>
                     <Text style={{fontSize: 12, fontWeight: '500', color: '#ef018a'}}>CREATE</Text>
                 </TouchableOpacity>
             </View>
-            
-            <ScrollView showsVerticalScrollIndicator={false} style={{padding: 20}}>
-                {/* Main Container */}
-                <View style={{marginTop: 20}}>
-                    <Text style={{textAlign: 'center', fontSize: 30, fontWeight: '700'}}>Let's Discuss</Text>
-                    <View style={{marginVertical: 20, backgroundColor: 'whitesmoke', borderWidth: 1, borderColor: 'lightgray', borderRadius: 20, flexDirection: 'row', alignItems: 'center',  paddingHorizontal: 10}}>
-                    <Ionicons name="search" size={20} color="gray"/>
-                    <TextInput
-                        placeholder="Search something..."
-                        style={{padding: 5, flex: 1, marginLeft: 10}}
-                        value={search}
-                        onChangeText={(text) => searchFilter(text)}
+            <HeaderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+            <View style={{flex: 1}}>
+                {activeTab === 'New Discussions' ? (
+                    <NewDiscussion 
+                        navigation={navigation}
                     />
-                </View>
+                ) : (
+                    <JoinedDiscussion 
+                        navigation={navigation}
+                     />
+                )}
+            </View>
+        </SafeAreaView>
+    )
+}
 
-                    {/* Disccussion List */}
-                    {loading ? (
-                        <ActivityIndicator size={'large'} color="#f25fb9" />
-                    ) : (
-                        discussionsList.map((post, index) => (
-                            <View key={index} style={[{padding: 20, borderWidth: 1, borderColor: 'lightgray', borderRadius: 5, backgroundColor: 'white', marginVertical: 20}, styles.shadow]}>
-                                <Text style={{fontSize: 18, fontWeight: '500', marginBottom: 10}}>{post.title}</Text>
-                                <Text style={{color: 'gray', fontSize: 12, }}>{post.description}</Text>
-                                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 15}}>
-                                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', width: 100}}>
-                                        <Image 
-                                            source={require('../../../assets/bili.jpg')}
-                                            style={{width: 30, height: 30, borderRadius: 5}}
-                                        />
-                                        <Image 
-                                            source={require('../../../assets/me.jpg')}
-                                            style={{width: 30, height: 30, borderRadius: 5}}
-                                        />
-                                        <Image 
-                                            source={require('../../../assets/ife.jpg')}
-                                            style={{width: 30, height: 30, borderRadius: 5}}
-                                        />
-                                    </View>
-                                    <TouchableOpacity activeOpacity={0.5} style={{flexDirection: 'row', alignItems: 'center',}} onPress={() => navigation.navigate('discussionpage', { title: post.title, description: post.description, id: post.id })}>
-                                        <Text style={{ color: '#ef018a'}}>Join Forum </Text>
-                                        <Entypo name="triangle-right" size={15} color='#ef018a'/>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        ))
-                    )}
-                </View>
-            </ScrollView>
+
+export function NewDiscussion({navigation}) {
+    const [filterData, setFilterData] = useState([])
+    const [discussionsList, setDiscussionList] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
+    const [search, setSearch] = useState('')
+
+    const fetchDiscussions = async () => {
+        setLoading(true)
+        const q = query(collection(db, "discussions"), where("joined", "==", false), orderBy("createdAt", "desc")) // we are querying the discussions collection and ordering the discussions by the createdAt property in descending order
+        onSnapshot(q, (querySnapshot) => { // we are listening for changes in the database
+            const discussions = []
+            querySnapshot.forEach((doc) => {
+                discussions.push(doc.data())
+            })
+            setDiscussionList(discussions)
+            setFilterData(discussions)
+            setLoading(false)
+        })
+    }    
+
+    useEffect(() => {
+        fetchDiscussions()
+    }, [])
+
+    const joinDiscussion = (id) => {
+        const newDiscussionList = discussionsList.map((discussion) => { // we are mapping through the discussion list and checking if the discussion id matches the id of the discussion we want to join
+            if (discussion.id == id) { // if the discussion id matches the id of the discussion we want to join
+                setDoc(doc(db, "discussions", discussion.id), { // we are setting the discussion document in the database
+                    ...discussion, // we are spreading the discussion object
+                    joined: true // we are setting the joined property to true
+                }, { merge: true }) // we are merging the data with the existing data in the database
+                alert("Joined")
+                return { // we are returning the discussion object with the joined property set to true
+                    ...discussion, 
+                    joined: true
+                }
+            } else {
+                return discussion
+            }
+        })
+        setDiscussionList(newDiscussionList)
+    }
+
+    const searchFilterFunction = (text) => {
+        if (text) {
+            const newData = filterData.filter(function (item) {
+                const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+                const textData = text.toUpperCase()
+                return itemData.indexOf(textData) > -1
+            })
+            setDiscussionList(newData)
+            setSearch(text)
+        } else {
+            setDiscussionList(filterData)
+            setSearch(text)
+        }
+    }
+
+    const onRefresh = () => {
+        setRefreshing(true)
+        fetchDiscussions()
+        setRefreshing(false)
+    }
+
+    const renderDiscussions = ({item, index}) => {
+        return <Discussion 
+            key={index}
+            discussion={item}
+            joinDiscussion={joinDiscussion}
+            navigation={navigation}
+            containerStyle={{
+                marginVertical: 5, 
+                marginTop: 10,
+            }}
+        />
+    }
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#f25fb9' }}>
+                <TextInput
+                    style={{ backgroundColor: 'white', borderRadius: 10, padding: 10, flex: 1, marginRight: 10 }}
+                    placeholder="Search"
+                    placeholderTextColor="#666"
+                    value={search}
+                    onChangeText={(text) => searchFilterFunction(text)}
+                />
+                <TouchableOpacity activeOpacity={0.5}  onPress={() => searchFilterFunction("")}>
+                    <Ionicons name="close" size={24} color="white" />
+                </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, backgroundColor: 'whitesmoke', marginTop: 10 }}>
+                {loading ? <ActivityIndicator size="large" color="#f25fb9" style={{ marginTop: 20 }} /> : (
+                    <FlatList
+                        data={discussionsList}
+                        renderItem={renderDiscussions}
+                        keyExtractor={(item) => item.id}
+                        showsVerticalScrollIndicator={false}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}                           
+                    />
+                )}
+            </View>
         </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
-        backgroundColor: '#fff',
-        //padding: 20
-    },
-
-    shadow: {  
-        shadowOffset: {width: 0, height: 1},
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowRadius: 10,
-        elevation: 1,
+        flex: 1,
+        backgroundColor: 'whitesmoke'
     }
-})
+}) 
+
+export function JoinedDiscussion({navigation}) {
+    const [filterData, setFilterData] = useState([])
+    const [discussionsList, setDiscussionList] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
+    const [search, setSearch] = useState("")
+
+
+    const fetchJoinedDiscussions = async () => {
+        setLoading(true)
+        const q = query(collection(db, "discussions"), where("joined", "==", true), orderBy("createdAt", "desc"))
+        onSnapshot(q, (querySnapshot) => {
+            const list = []
+            querySnapshot.forEach((doc) => {
+                const { title, description, joined, createdAt } = doc.data()
+                list.push({
+                    id: doc.id,
+                    title,
+                    description,
+                    joined,
+                    createdAt
+                })
+            })
+            setDiscussionList(list)
+            setFilterData(list)
+            setLoading(false)
+        })
+    }
+
+
+    useEffect(() => {
+        fetchJoinedDiscussions()
+    }, [])
+
+
+    const leaveDiscussion = (id) => {
+        const newDiscussionList = discussionsList.map((discussion) => {
+            if (discussion.uid == id) {
+                setDoc(doc(db, "discussions", discussion.uid), {
+                    ...discussion,
+                    joined: false
+                }, { merge: true })
+                return {
+                    ...discussion,
+                    joined: false
+                }
+            } else {
+                return discussion
+            }
+        })
+        setDiscussionList(newDiscussionList)
+    }
+
+    const searchFilterFunction = (text) => {
+        if (text) {
+            const newData = filterData.filter(function (item) {
+                const itemData = item.title ? item.title.toUpperCase() : ''.toUpperCase()
+                const textData = text.toUpperCase()
+                return itemData.indexOf(textData) > -1
+            })
+            setDiscussionList(newData)
+            setSearch(text)
+        } else {
+            setDiscussionList(filterData)
+            setSearch(text)
+        }
+    }
+
+    const onRefresh = () => {
+        setRefreshing(true)
+        fetchJoinedDiscussions()
+        setRefreshing(false)
+    }
+
+    const renderDiscussions = ({item, index}) => {
+        return <Discussion 
+            key={index}
+            discussion={item}
+            leaveDiscussion={leaveDiscussion}
+            navigation={navigation}
+            containerStyle={{
+                marginVertical: 5, 
+                marginTop: 10,
+            }}
+        />
+    }
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 10, backgroundColor: '#f25fb9' }}>
+                <TextInput
+                    style={{ backgroundColor: 'white', borderRadius: 10, padding: 10, flex: 1, marginRight: 10 }}
+                    placeholder="Search"
+                    placeholderTextColor="#666"
+                    value={search}
+                    onChangeText={(text) => searchFilterFunction(text)}
+                />
+                <TouchableOpacity activeOpacity={0.5}  onPress={() => searchFilterFunction("")}>
+                    <Ionicons name="close" size={24} color="white" />
+                </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, backgroundColor: 'whitesmoke', marginTop: 10 }}>
+                {loading ? <ActivityIndicator size="large" color="#f25fb9" style={{ marginTop: 20 }} /> : (
+                    <FlatList
+                        data={discussionsList}
+                        renderItem={renderDiscussions}
+                        keyExtractor={(item) => item.id}
+                        showsVerticalScrollIndicator={false}
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}                           
+                    />
+                )}
+            </View>
+        </SafeAreaView>
+    )
+}
+
+
+
+export function HeaderTabs({ activeTab, setActiveTab }) {
+    return (
+        <View style={{flexDirection: 'row', alignSelf: 'center', justifyContent: 'center', backgroundColor: '#fff', width: '100%'}}>
+            <HeaderButton
+                text="New Discussions"
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+            />
+            <View style={{height: 30, width: 1, backgroundColor: 'lightgray'}} />
+            <HeaderButton
+                text="Joined Discussions"
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+            />
+        </View>
+    )
+}
+
+export function HeaderButton({ text, activeTab, setActiveTab }) {
+    return (
+        <TouchableOpacity onPress={() => setActiveTab(text)} style={{ backgroundColor: 'transparent', paddingVertical: 6, paddingHorizontal: 16, borderRadius: 30}}>
+            <Text style={{color: activeTab === text ? '#f25fb9' : 'gray', fontSize: 15, fontWeight: '700'}}>{text}</Text>
+        </TouchableOpacity>
+    )
+}

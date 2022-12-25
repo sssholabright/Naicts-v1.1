@@ -1,92 +1,115 @@
-import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView } from 'react-native';
+import { ActivityIndicator, Linking, View, Text, SafeAreaView, StatusBar, StyleSheet, TouchableOpacity, Platform, TextInput, KeyboardAvoidingView } from 'react-native';
 import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../SignedOutStack/authHooks/firebase';
 
-export default function ContactUs({navigation}) {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+export default function ContactUs({ navigation }) {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-    const disabled = !name && !email && !message;
-
-    const sendMessage = async () => {
-        setLoading(true);
-        const messageSent = {
-            name: name,
-            email: email,
-            message: message,
+    const handleSubmit = async () => {
+        if (!name || !email || !message) {
+            setError('Please fill in all fields');
+            return;
         }
-        const messageRef = await addDoc(collection(db, "contact_us"), messageSent)
-        setLoading(false)
-        console.log("Document written with ID: ", messageRef.id);
-        console.error("Error adding document: ", error);
-        setName("");
-        setEmail("");
-        setMessage("");
-    }
+        setError('');
+        setLoading(true);
+        try {
+            await addDoc(collection(db, 'contact'), {
+                name,
+                email,
+                message,
+            });
+            setLoading(false);
+            setName('');
+            setEmail('');
+            setMessage('');
+            Linking.openURL('mailto: brightprogrammer1@gmail.com ?subject=Contact Us&body=Name: ' + name + '%0D%0AEmail: ' + email + '%0D%0AMessage: ' + message);
+        } catch (error) {
+            setLoading(false);
+            setError(error.message);
+        }
+    };
 
     return (
-        <KeyboardAvoidingView behaviour={"padding"} style={styles.container}>
-            <StatusBar barStyle="light-content" backgroundColor="#ef018a"/>
-            <View style={{flexDirection: 'row', backgroundColor: '#ef018a', paddingHorizontal: 20, margin: -20, paddingVertical: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
-                <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
-                    {Platform.OS === "android" ? (
-                        <Ionicons name="arrow-back" size={24} color='#fff' /> 
-                    ): Platform.OS === "ios" (
-                        <Ionicons name="chevron-back" size={24} color='#fff' />
-                    )}
-                </TouchableOpacity> 
-                <View style={{}}>
-                    <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>CONTACT US</Text>
-                </View>  
-                <Text>{'        '}</Text>
-            </View>
-
-            {/* Contact Us Section */}
-            <View style={{marginTop: 30}}>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>Talk to Us</Text>
-                <Text style={{marginTop: 10, color: 'gray', fontSize: 16}}>If you have any questions, complains or suggestions, please contact us and we will be in touch shortly.</Text>
-                <TextInput 
-                    style={styles.input} 
-                    placeholder="Full Name"
-                    value={name}
-                    onChangeText={(name) => setName(name)}
-                />
-                <TextInput 
-                    style={styles.input}
-                    placeholder="Email Address"
-                    value={email}
-                    onChangeText={(email) => setEmail(email)}
-                />
-                <TextInput
-                    style={[styles.input, {height: 100}]}
-                    placeholder="Message"
-                    multiline
-                    textAlignVertical="top"
-                    value={message}
-                    onChangeText={(message) => setMessage(message)}
-                />
-
-                
-
-                <TouchableOpacity activeOpacity={0.5} onPress={sendMessage} disabled={disabled} style={!disabled ? {backgroundColor: '#ef018a', padding: 10, borderRadius: 5, marginTop: 20}: {backgroundColor: 'gray', padding: 10, borderRadius: 5, marginTop: 20}}>
-                    <Text style={{color: '#fff', fontSize: 16, fontWeight: '700', textAlign: 'center'}}>{loading ? 'Loading...': 'Send Message'}</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
-    )
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+            <StatusBar barStyle="light-content" backgroundColor="#f25fb9"/>
+                <View style={{flexDirection: 'row', backgroundColor: '#f25fb9', paddingHorizontal: 20, paddingTop: 15, alignItems: 'center', justifyContent: 'space-between', paddingBottom: 10}}>
+                    <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.goBack()}>
+                        {Platform.OS === "android" ? (
+                            <Ionicons name="arrow-back" size={24} color='#fff' /> 
+                        ): Platform.OS === "ios" (
+                            <Ionicons name="chevron-back" size={24} color='#fff' />
+                        )}
+                    </TouchableOpacity> 
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={{fontSize: 18, letterSpacing: 0.1, color: '#fff', fontWeight: '700'}}>CONTACT US</Text>
+                    </View>  
+                    <View style={{ width: 24 }} />
+                </View>
+                <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+                    <View style={{ marginBottom: 20, paddingHorizontal: 20 }}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', marginTop: 20 }}>Talk to Us!</Text>
+                        <Text style={{ fontSize: 14, fontWeight: '500', marginTop: 10 }}>If you have any questions or complaints. Please fill in the form below and we will get back to you as soon as possible.</Text>
+                    </View>
+                    <View style={{ flex: 1, paddingHorizontal: 20 }}>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: '600' }}>Name</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={name}
+                                onChangeText={setName}
+                            />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: '600' }}>Email</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={email}
+                                onChangeText={setEmail}
+                            />
+                        </View>
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={{ fontSize: 16, fontWeight: '600' }}>Message</Text>
+                            <TextInput
+                                style={styles.input}
+                                value={message}
+                                onChangeText={setMessage}
+                                multiline
+                                numberOfLines={4}
+                                textAlignVertical="top"
+                            />
+                        </View>
+                    <View style={{ marginTop: 10 }}>
+                        <TouchableOpacity
+                            style={{ backgroundColor: '#f25fb9', paddingVertical: 15, alignItems: 'center', borderRadius: 5 }}
+                            onPress={handleSubmit}
+                        >
+                            {loading ? (
+                                <ActivityIndicator color="#fff" />
+                            ) : (
+                                <Text style={{ color: '#fff', fontSize: 16, fontWeight: 'bold' }}>Submit</Text>
+                            )}
+                        </TouchableOpacity>
+                    </View>
+                    {error ? (
+                        <View style={{ marginTop: 10 }}>
+                            <Text style={{ color: 'red' }}>{error}</Text>
+                        </View>
+                    ) : null}
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
+    );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        padding: 20,
-    },
+// The code above is the ContactUs.js file. It is a simple form that allows the user to enter their name, email, and message. The user can then submit the form and it will send an email to the developer. The code below is the styles for the form.
 
+const styles = StyleSheet.create({
     input: {
         marginVertical: 10, 
         borderWidth: 1, 
@@ -96,4 +119,3 @@ const styles = StyleSheet.create({
         fontSize: 16
     }
 })
-
